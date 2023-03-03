@@ -11,6 +11,8 @@
 
   <!-- <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/sticky-footer-navbar/"> -->
 
+  <link href="./assets/bootstrap-icons.css" rel="stylesheet">
+
   <link href="./assets/bootstrap.min.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
@@ -37,54 +39,92 @@
             <h4 class="">Cash Flows</H4>
             <p class="text-muted">Something here</p>
           </div>
+
+
+
+          <!-- App starts here -->
           <div class="cf-table-wrap" id="CFXTable">
+            <!-- Toolbox -->
             <div class="toolbox"></div>
+            <!-- Table -->
             <div class="table-container">
-              <div class="">
-                <!-- <div class="CFXrow " -->
-                <div class="row header">
-                  <div class="row-head sticky">
-                    Something
-                  </div>
+              <div class="table-layout">
 
-                  <div class="total-column sticky">Total</div>
-                  <div class="cf">
-                    <div class="col date">06/10/2022</div>
-                    <div class="col date">06/10/2022</div>
-                    <div class="col date">06/10/2022</div>
-                    <div class="col date">06/10/2022</div>
-                    <div class="col date">06/10/2022</div>
-                    <div class="col date">06/10/2022</div>
-                    <div class="col date">06/10/2022</div>
-                    <div class="col date">06/10/2022</div>
-                    <div class="col date">06/10/2022</div>
-                    <div class="col date">06/10/2022</div>
+                <!-- Row Head -->
+                <div class="table-column row-head">
+                  <div class="column-header sticky">
+                    <div class="row-start-cell"></div>
+                    <!-- <div class="add-row"></div> -->
+                    <div class="row-name">Table Name</div>
+                    <!-- <div class=""></div> -->
                   </div>
+                  <div class="row">
+                    <div class="row-start-cell">
+                      <div class="row-select"></div>
+                      <div class="add-row" onclick="addRow()"></div>
+                    </div>
+                    <div class="row-name">Row Name</div>
+                    <div class="row-command row-delete"><i class="bi bi-x row-head-details"></i></div>
+                    <div class="row-command row-edit"><i class="bi bi-three-dots-vertical row-head-details"></i></div>
+                    <!-- <div class=""></div> -->
+                  </div>
+                </div>
+
+                <!-- Total area -->
+                <div class="table-column total-column">
+                  <div class="column-header sticky">
+                    <div class="total-header">Total</div>
+                  </div>
+                  <div class="row total-row">0.00</div>
 
                 </div>
+
+                <!-- CF area -->
+                <div class="table-column cf">
+                  <div class="column-header sticky">
+                    <div class="row">
+                      <div class="col date">06/10/2022</div>
+                      <div class="col date">06/10/2022</div>
+                      <div class="col date">06/10/2022</div>
+                      <div class="col date">06/10/2022</div>
+                      <div class="col date">06/10/2022</div>
+                      <div class="col date">06/10/2022</div>
+                      <div class="col date">06/10/2022</div>
+                      <div class="col date">06/10/2022</div>
+                      <div class="col date">06/10/2022</div>
+                      <div class="col date">06/10/2022</div>
+                    </div>
+
+                  </div>
+                  <div class="row">
+                    <div class="col cell"><span>0.00</span></div>
+                    <div class="col cell"><span>0.00</span></div>
+                    <div class="col cell"><span>0.00</span></div>
+                    <div class="col cell"><span>0.00</span></div>
+                    <div class="col cell"><span>0.00</span></div>
+                    <div class="col cell"><span>0.00</span></div>
+                    <div class="col cell"><span>0.00</span></div>
+                    <div class="col cell"><span>0.00</span></div>
+                    <div class="col cell"><span>0.00</span></div>
+                    <div class="col cell"><span>0.00</span></div>
+                  </div>
+                </div>
+
+
               </div>
-              <div class="row">
-                <div class="row-head sticky">Row Name</div>
+            </div>
 
-                <div class="total-column sticky">0.00</div>
-                <div class="cf">
-                  <div class="col cf-value">0.00</div>
-                  <div class="col cf-value">0.00</div>
-                  <div class="col cf-value">0.00</div>
-                  <div class="col cf-value">0.00</div>
-                  <div class="col cf-value">0.00</div>
-                  <div class="col cf-value">0.00</div>
-                  <div class="col cf-value">0.00</div>
-                  <div class="col cf-value">0.00</div>
-                  <div class="col cf-value">0.00</div>
-                  <div class="col cf-value">0.00</div>
-                </div>
-
+            <!-- Scroller -->
+            <div id="scroll-section">
+              <div></div>
+              <div id="scroll-wrapper">
+                <div id="scroll-cursor"></div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
   </main>
 
   <footer class="footer mt-auto py-1">
@@ -94,6 +134,7 @@
   </footer>
 
   <script src="jquery-3.6.1.min.js"></script>
+  <script src="scrollbar.js"></script>
   <script src="script.js"></script>
 
 
