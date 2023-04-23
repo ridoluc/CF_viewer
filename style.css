@@ -79,6 +79,9 @@ footer{
   border-radius: 4px;
 }
 
+#CFXTable .column-header .date{
+
+}
 
 
 #CFXTable .row{
@@ -109,11 +112,11 @@ footer{
   row-gap: 2px;
 }
 
-#CFXTable .row-head{
+#CFXTable .column-row-head{
   grid-area: row-head-area;
 
 }
-#CFXTable .total-column{
+#CFXTable .column-total{
   grid-area: total-area;
   font-weight: 700;
 }
@@ -180,7 +183,7 @@ footer{
 }
 
 
-#CFXTable .total-column>*{
+#CFXTable .column-total>*{
   text-align: center;
   justify-content: center;
 }
@@ -196,10 +199,11 @@ footer{
 #CFXTable .cf .col{
   width: 90px;
   text-align: right;
+  padding-right: 2px;
 }
 
 #CFXTable .cf .cell{
-  padding-right: 4px;
+  /* padding-right: 4px; */
 }
 
 #CFXTable .cf .cell.selected{

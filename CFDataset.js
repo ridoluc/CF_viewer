@@ -1,9 +1,56 @@
 
 class CFDataSet {
-	constructor(dat) {
-		this.data = [];
-		this.data.push(new CFLine(dat[0]));
+	constructor() {
+      this.idCounter=0;
+		this.CFlines = [];
+      this.datesRange = { max: null, min: null };
+
 	}
+
+   getDates(time_interval) 
+   {
+		if (this.CFlines.length > 0) return this.CFlines[0].getDates(time_interval);
+		else return null;
+   }
+
+   getLine(id)
+   {
+      return this.CFlines.find(e => e.id == id)
+   }
+
+   addLine(newLine)
+   {
+      newLine.id = this.idCounter++;
+		this.CFlines.push(newLine);
+      this.updateDatesRange()
+   }
+
+   /**
+    * Updates the range of dates for each line
+    */
+   updateDatesRange()
+   {
+      let min, max;
+
+      // Find Min
+      this.CFlines.forEach(line => {
+         if(min == null || line.range.min < min) min = line.range.min
+      });
+
+      // Find Max
+      this.CFlines.forEach(line => {
+         if(max == null || line.range.max > max) max = line.range.max
+      });
+
+      this.datesRange.max = max;
+      this.datesRange.min = min;
+
+      // Update all
+      this.CFlines.forEach(line => {
+         line.updateDateRange(max);
+         line.updateDateRange(min);
+      });
+   }
 }
 
 
@@ -27,9 +74,10 @@ class CFElement {
  * Improvements:
  * - put M,Q,Y data into a map accessible with date_type
  */
-export class CFLine {
-	constructor(_name = "Data name", data) {
-		this.line_name = _name;
+class CFLine {
+	constructor(_id, _name = "Data name", data = null) {
+		this.id = _id;
+      this.line_name = _name;
 		this.raw_data = []; //daily
 		this.EoM_data = []; // Monthly
 		this.EoQ_data = []; // Quarterly
@@ -48,6 +96,7 @@ export class CFLine {
 	 * Adjust the range of dates based on a new date 
 	 *
 	 * @param {number} date expressed in millisec
+    * @returns Object {max:number, min:number} range of dates in the dataset
 	 */
 	updateDateRange(date) {
 		// The new date is already in the line range
@@ -143,6 +192,7 @@ export class CFLine {
          this.EoY_data.sort((a, b) => a.date - b.date);
 		}
 
+      return this.range;
 	}
 
 	selectDateInterval(interval) {
@@ -250,7 +300,7 @@ export class CFLine {
 		return this;
 	}
 
-	aggregate(endPeriodFunc, months_interval) {
+/*	aggregate(endPeriodFunc, months_interval) {
 		let dates = [...this.daily_data.keys()];
 		let min_date = endPeriodFunc(Math.min(...dates));
 		let max_date = endPeriodFunc(Math.max(...dates));
@@ -283,9 +333,11 @@ export class CFLine {
 	aggregateYearly() {
 		return this.aggregate((a) => new CFDate(a).EoYear(), 12);
 	}
+*/
+
 }
 
-export class CFDate {
+class CFDate {
 	/** Create Date from milliseconds */
 	constructor(value) {
 		this.date_obj = new Date(value);
@@ -340,14 +392,14 @@ export class CFDate {
       let dt = new Date(value);
       let date = dt.getDate();
       let month_numb = dt.getMonth();
-      let month = ['January','February','March','April','June','July','August','September','October','November','December'][month_numb];
+      let month = ['January','February','March','April','May','June','July','August','September','October','November','December'][month_numb];
       let year = dt.getFullYear();
 
       switch (format) {
          case 'yyyy':
             return ''+ year;
          case 'mmm yyyy':
-            return month.slice(0,2) + ' ' + year;
+            return month.slice(0,3) + ' ' + year;
          case 'mm/yyyy':
             return   ('0'+(month_numb+1)).slice(-2) +'/'
                      + year;
