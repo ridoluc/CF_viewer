@@ -19,10 +19,9 @@ let testdata = [
 
 let Table;
 
-
 $(document).ready(function () {
 	Table = new CFXTable();
-	Table.dataset.addLine(new CFLine(0,testdata[0].name, testdata[0].cf))
+	Table.dataset.addLine(new CFLine(0, testdata[0].name, testdata[0].cf));
 	Table.update();
 	scrollbar = new Scrollbar(
 		document.getElementById("scroll-wrapper"),
@@ -37,8 +36,8 @@ class CFXTable {
 		this.dataset = new CFDataSet();
 		this.id_counter = 0;
 
-		this.time_interval = CFLine.time_interval.quarter
-		this.cf_column_count; 
+		this.time_interval = CFLine.time_interval.quarter;
+		this.cf_column_count;
 
 		this.column = {
 			row_head: $(".column-row-head"),
@@ -62,7 +61,6 @@ class CFXTable {
 		//    }
 		//  ));
 	}
-
 
 	/**
 	 * create the visual representation of the CF line
@@ -89,18 +87,14 @@ class CFXTable {
 			// .attr("data-rowid", newid)
 			.html("0.00");
 
-		
 		let interval = this.time_interval;
-		
 
-		let cf_html = ''
-		for(let i =0; i<this.cf_column_count;i++){
-			cf_html += '<div class="col cell"><span>0</span></div>'
+		let cf_html = "";
+		for (let i = 0; i < this.cf_column_count; i++) {
+			cf_html += '<div class="col cell"><span>0</span></div>';
 		}
 
-		const cf = $("<div>")
-			.addClass("row row-cf")
-			.html(cf_html);
+		const cf = $("<div>").addClass("row row-cf").html(cf_html);
 
 		[row_head, total_row, cf].forEach((i) =>
 			i.hover(
@@ -117,27 +111,25 @@ class CFXTable {
 			)
 		);
 
-
-
 		return {
-				'row_head':row_head, 
-				'total_row':total_row, 
-				'cf':cf
-			};
+			row_head: row_head,
+			total_row: total_row,
+			cf: cf,
+		};
 	}
 
-	rowAdd(new_row){
+	rowAdd(new_row) {
 		this.column.row_head.append(new_row.row_head);
 		this.column.total.append(new_row.total_row);
 		this.column.cf.append(new_row.cf);
 	}
-	
+
 	/**
 	 * Update the data of a table row
 	 * @param {Object} row object with components of a row
 	 * @param {CFLine} line_data data of the cf line
 	 */
-	rowUpdate(row, line_data){
+	rowUpdate(row, line_data) {
 		let id = line_data.id;
 		let cf = line_data.getValues;
 		let cf_count = cf.length;
@@ -146,19 +138,20 @@ class CFXTable {
 		row.total_row.attr("data-rowid", id);
 		row.cf.attr("data-rowid", id);
 
+		row.row_head.find(".row-name")[0].text = line_data.line_name;
 
-		row.row_head.find(".row-name")[0].text= line_data.line_name;
-
-		let cf_html = ''
-		line_data.getValues(this.time_interval).forEach(element => {
-			cf_html += '<div class="col cell"><span>'+CFXTable.numberFormatting(element)+'</span></div>'
+		let cf_html = "";
+		line_data.getValues(this.time_interval).forEach((element) => {
+			cf_html +=
+				'<div class="col cell"><span>' +
+				CFXTable.numberFormatting(element) +
+				"</span></div>";
 		});
 
 		row.cf[0].innerHTML = cf_html;
 
 		return row;
 	}
-
 
 	// Cells interaction
 
@@ -179,83 +172,73 @@ class CFXTable {
 
 		cells.dblclick(addInput);
 
-		cells.keypress(function(e){
-			if(e.which == 13){
-				if(e.target.nodeName == "INPUT")	deleteInput(e);
+		cells.keypress(function (e) {
+			if (e.which == 13) {
+				if (e.target.nodeName == "INPUT") deleteInput(e);
 				// TO DO: enter edit mode
 			}
 		});
 
-
-		function addInput(e){
+		function addInput(e) {
 			//if there is already an input ignore
-			if(this.firstChild.nodeName == 'INPUT') return;
+			if (this.firstChild.nodeName == "INPUT") return;
 
-			var input = $("<input>", { type: "text" }).val(
-				$(this).find("span").text()
-			)
-			.focusout(deleteInput);
+			var input = $("<input>", { type: "text" })
+				.val($(this).find("span").text())
+				.focusout(deleteInput);
 
 			$(this).html(input);
 			input.focus();
-		};
+		}
 
-		function deleteInput(elm){
+		function deleteInput(elm) {
 			let input = $(elm.target);
-			let input_val = parseFloat(input.val().replaceAll(',',''));
-			if(!input_val) input_val = 0;
+			let input_val = parseFloat(input.val().replaceAll(",", ""));
+			if (!input_val) input_val = 0;
 			input_val = CFXTable.numberFormatting(input_val);
 
 			input.parent().html($("<span>").text(input_val));
-		};
-
-
+		}
 	}
 
-	update()
-	{
+	update() {
 		let dates = this.dataset.getDates(this.time_interval);
 		this.updateHeader(dates);
 		this.cf_column_count = dates.length;
 		let new_row = this.rowCreate();
-		this.rowUpdate(new_row,this.dataset.CFlines[0]);
+		this.rowUpdate(new_row, this.dataset.CFlines[0]);
 		this.rowAdd(new_row);
 		this.cellEvents();
-
 	}
 
-	updateHeader(dates)
-	{
-		let headerRow = $('.column-header>.row');
-		
-		let header_content = ''
+	updateHeader(dates) {
+		let headerRow = $(".column-header>.row");
 
-		dates.forEach(d => {
-			header_content += 
+		let header_content = "";
+
+		dates.forEach((d) => {
+			header_content +=
 				'<div class="col date">' +
-				'<span>' +
-				CFDate.toString(d, 'mmm yyyy') +
-				'</span></div>'
+				"<span>" +
+				CFDate.toString(d, "mmm yyyy") +
+				"</span></div>";
 		});
 
 		headerRow.html(header_content);
 	}
 
-	updateRow(row, values){
-		let row_content = '';
+	updateRow(row, values) {
+		let row_content = "";
 
-		values.forEach(d => {
-			row_content += 
-				'<div class="col cell">' +
-				'<span>' +
-				d +
-				'</span></div>'
+		values.forEach((d) => {
+			row_content +=
+				'<div class="col cell">' + "<span>" + d + "</span></div>";
 		});
 
 		row.html(row_content);
 	}
 
-	static numberFormatting(n){
+	static numberFormatting(n) {
 		return n.toLocaleString();
 	}
 }
