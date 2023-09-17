@@ -63,7 +63,7 @@ footer{
 #CFXTable .table-layout{
   display: grid;
   /* grid-auto-flow: column; */
-  grid-template-columns: 220px 80px 1fr;
+  grid-template-columns: 190px 80px 1fr;
   grid-template-areas: "row-head-area total-area cf-area";
   column-gap: 10px;
   /* width: fit-content; */

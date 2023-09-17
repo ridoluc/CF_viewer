@@ -1,4 +1,4 @@
-import {CFLine, CFDate} from './CFDataset.js'
+import {CFLine, CFDate, CFDataSet} from './CFDataset.js'
 
 let testdata = [[
 		{ date: "2023-02-23", value: -10000 },
@@ -11,12 +11,22 @@ let testdata = [[
 		{ date: "2025-09-03", value: 2500 },
 ]];
 
-let cfline = new CFLine('My new line', testdata[0]);
+let cfds = new CFDataSet();
 
-// printData(cfline.getLineData(CFLine.time_interval.quarter))
+cfds.addLine('My new line', testdata[0]);
+cfds.addLine('Second line');
+
+console.log("line 1:"+cfds.getLine(0).line_name)
+
+printData(cfds.getLine(0).getLineData(CFLine.time_interval.year));
+
+console.log("line 2:"+cfds.getLine(1).line_name);
+printData(cfds.getLine(1).getLineData(CFLine.time_interval.year));
+
 
 function printData(dt){
    dt.forEach(e => {
       console.log(CFDate.toString(e.date, 'mmm yyyy')+'      '+e.value);
    });
 }
+

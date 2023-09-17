@@ -15,13 +15,28 @@ let testdata = [
 			{ date: "2025-10-23", value: 2500 },
 		],
 	},
+	{
+		name: "Second Line",
+		cf: [
+			{ date: "2023-03-23", value: -1000 },
+			{ date: "2023-05-01", value: 10 },
+			{ date: "2023-04-01", value: 10 },
+			{ date: "2023-09-03", value: 10 },
+			{ date: "2023-10-18", value: 100 },
+			{ date: "2024-01-12", value: -10 },
+			{ date: "2024-06-10", value: -500 },
+			{ date: "2025-10-03", value: 300 },
+			{ date: "2026-01-12", value: 2000 },
+		],
+	},
 ];
 
 let Table;
 
 $(document).ready(function () {
 	Table = new CFXTable();
-	Table.dataset.addLine(new CFLine(0, testdata[0].name, testdata[0].cf));
+	Table.dataset.addLine(testdata[0].name, testdata[0].cf);
+	Table.dataset.addLine(testdata[1].name, testdata[1].cf);
 	Table.update();
 	scrollbar = new Scrollbar(
 		document.getElementById("scroll-wrapper"),
@@ -75,12 +90,17 @@ class CFXTable {
 			.html(
 				'<div class="row-start-cell">' +
 					'<div class="row-select"></div>' +
-					'<div class="add-row" onclick="Table.addRow()"></div>' +
+					'<div class="add-row" onclick="Table.rowNew()"></div>' +
 					"</div>" +
 					'<div class="row-name">Line Name</div>' +
-					'<div class="row-command row-delete"><i class="bi bi-x row-head-details"></i></div>' +
+					'<div class="row-command row-delete" ><i class="bi bi-x row-head-details"></i></div>' +
 					'<div class="row-command row-edit"><i class="bi bi-three-dots-vertical row-head-details"></i></div>'
 			);
+			
+		row_head.find(".row-delete")[0].addEventListener("click", (event) => {
+			const row_id = parseInt($(event.currentTarget.parentNode).attr("data-rowid"));
+			this.rowDelete(row_id);
+		});
 
 		const total_row = $("<div>")
 			.addClass("row row-total")
@@ -118,10 +138,20 @@ class CFXTable {
 		};
 	}
 
-	rowAdd(new_row) {
+	rowAdd(line_data) {
+		let new_row = this.rowCreate();
+		this.rowUpdate(new_row, line_data);
+
 		this.column.row_head.append(new_row.row_head);
 		this.column.total.append(new_row.total_row);
 		this.column.cf.append(new_row.cf);
+	}
+
+	rowNew(){
+		let last_line = this.dataset.addLine('new name', null);
+		this.rowAdd(last_line);
+
+		this.cellEvents();
 	}
 
 	/**
@@ -138,7 +168,7 @@ class CFXTable {
 		row.total_row.attr("data-rowid", id);
 		row.cf.attr("data-rowid", id);
 
-		row.row_head.find(".row-name")[0].text = line_data.line_name;
+		row.row_head.find(".row-name").text(line_data.line_name);
 
 		let cf_html = "";
 		line_data.getValues(this.time_interval).forEach((element) => {
@@ -152,6 +182,12 @@ class CFXTable {
 
 		return row;
 	}
+
+	rowDelete(id){
+		this.rowSelect(id).remove();
+		this.dataset.removeLine(id);
+	}
+
 
 	// Cells interaction
 
@@ -205,9 +241,12 @@ class CFXTable {
 		let dates = this.dataset.getDates(this.time_interval);
 		this.updateHeader(dates);
 		this.cf_column_count = dates.length;
-		let new_row = this.rowCreate();
-		this.rowUpdate(new_row, this.dataset.CFlines[0]);
-		this.rowAdd(new_row);
+
+		for(const i of this.dataset.CFlines){
+			this.rowAdd(i);
+		}
+		
+
 		this.cellEvents();
 	}
 
@@ -227,16 +266,6 @@ class CFXTable {
 		headerRow.html(header_content);
 	}
 
-	updateRow(row, values) {
-		let row_content = "";
-
-		values.forEach((d) => {
-			row_content +=
-				'<div class="col cell">' + "<span>" + d + "</span></div>";
-		});
-
-		row.html(row_content);
-	}
 
 	static numberFormatting(n) {
 		return n.toLocaleString();

@@ -1,5 +1,5 @@
 
-class CFDataSet {
+/* export */ class CFDataSet {
 	constructor() {
       this.idCounter=0;
 		this.CFlines = [];
@@ -18,13 +18,19 @@ class CFDataSet {
       return this.CFlines.find(e => e.id == id)
    }
 
-   addLine(newLine)
+   addLine(name,data)
    {
-      newLine.id = this.idCounter++;
-		this.CFlines.push(newLine);
+      let new_line = new CFLine(this.idCounter++, name, data);
+		this.CFlines.push(new_line);
       this.updateDatesRange()
+
+      return new_line;
    }
 
+   removeLine(id){
+      let idx = this.CFlines.indexOf(e => e.id = id);
+      this.CFlines.splice(idx,1);
+   }
    /**
     * Updates the range of dates for each line
     */
@@ -34,7 +40,7 @@ class CFDataSet {
 
       // Find Min
       this.CFlines.forEach(line => {
-         if(min == null || line.range.min < min) min = line.range.min
+         if(line.range.min != null && (min == null || line.range.min < min)) min = line.range.min
       });
 
       // Find Max
@@ -74,8 +80,8 @@ class CFElement {
  * Improvements:
  * - put M,Q,Y data into a map accessible with date_type
  */
-class CFLine {
-	constructor(_id, _name = "Data name", data = null) {
+/* export */ class CFLine {
+	constructor(_id=0, _name = "Data name", data = null) {
 		this.id = _id;
       this.line_name = _name;
 		this.raw_data = []; //daily
@@ -337,7 +343,7 @@ class CFLine {
 
 }
 
-class CFDate {
+/* export */ class CFDate {
 	/** Create Date from milliseconds */
 	constructor(value) {
 		this.date_obj = new Date(value);
