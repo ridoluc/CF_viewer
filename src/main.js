@@ -1,4 +1,5 @@
-import {CFDataSet, CFLine} from './CFEngine/CFDataset.js'
+import {CFDataSet} from './CFEngine/CFDataset.js'
+import { CFLine } from './CFEngine/Line.js';
 import { CFDate } from './CFEngine/CFDate.js';
 import { Scrollbar } from './scrollbar.js';
 import './styles.scss';
@@ -170,7 +171,6 @@ class CFXTable {
 	rowUpdate(row, line_data) {
 		let id = line_data.id;
 		let cf = line_data.getValues;
-		let cf_count = cf.length;
 
 		row.row_head.attr("data-rowid", id);
 		row.total_row.attr("data-rowid", id);
