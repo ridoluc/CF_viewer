@@ -10,8 +10,6 @@ import { CFElement } from "./Element";
  * - put M,Q,Y data into a map accessible with date_type
  */
 export class CFLine {
-	static time_interval = { day: 0, month: 1, quarter: 2, year: 3 };
-
 	constructor(_id = 0, _name = "Data name", data = null) {
 		this.id = _id;
 		this.line_name = _name;
@@ -27,153 +25,113 @@ export class CFLine {
 	}
 
 	/**
-	 * Adjust the range of dates based on a new date
+	 * Calculate the cash flows for the line within a specified time interval.
 	 *
-	 * @param {number} date expressed in millisec
-	 * @returns Object {max:number, min:number} range of dates in the dataset
+	 * @param {CFDate} dateStart - The start date.
+	 * @param {CFDate} dateEnd - The end date.
+	 * @param {CFLine.time_interval} interval - The time interval: CFLine.time_interval.month, CFLine.time_interval.quarter, or CFLine.time_interval.year.
+	 *
+	 * @returns {Array<number>} - An array of cash flows within the specified interval.
 	 */
-	updateDateRange(date) {
-		// The new date is already in the line range
-		if (date >= this.range.min && date <= this.range.max) return;
+	getValues(dateStart, dateEnd, interval) {
+		const lineData = [];
 
-		let d = new CFDate(date);
-		let n = 0;
+		if (dateStart.value > dateEnd.value)
+			throw new Error("Invalid date interval");
 
-		const m = (i) => d.EoMonth(i).value;
-		const q = (i) => d.EoQuarter(i).value;
-		const y = (i) => d.EoYear(i).value;
+		let dateStart_eop = dateStart.EoPeriod(interval);
+		let dateEnd_eop = dateEnd.EoPeriod(interval);
 
-		// if there is no data yet
-		if (this.EoM_data.length == 0) {
-			this.range.min = m(0);
-			this.range.max = m(0);
+		// Iterate through dates in the specified range
+		let currentDate = dateStart_eop;
 
-			this.EoM_data.push(new CFElement(m(n), 0));
-			this.EoQ_data.push(new CFElement(q(n), 0));
-			this.EoY_data.push(new CFElement(y(n), 0));
-		}
-		// new date less than earliest date in the range
-		else if (date < this.range.min) {
-			this.range.min = m(0);
+		while (currentDate.value <= dateEnd_eop.value) {
+			const cf_value = this.getValueAtDate(currentDate, interval);
+			lineData.push(cf_value);
 
-			n = 0;
-			while (m(n) < this.EoM_data[0].date) {
-				this.EoM_data.push(new CFElement(m(n), 0));
-				n++;
-			}
-
-			n = 0;
-			while (q(n) < this.EoQ_data[0].date) {
-				this.EoQ_data.push(new CFElement(q(n), 0));
-				n++;
-			}
-
-			n = 0;
-			while (y(n) < this.EoY_data[0].date) {
-				this.EoY_data.push(new CFElement(y(n), 0));
-				n++;
-			}
-
-			// sort
-			this.EoM_data.sort((a, b) => a.date - b.date);
-
-			this.EoQ_data.sort((a, b) => a.date - b.date);
-
-			this.EoY_data.sort((a, b) => a.date - b.date);
-		}
-		// the new date is larger than latest date in the array
-		else {
-			this.range.max = m(0);
-
-			let new_values = [];
-
-			// Months
-			n = 0;
-			while (m(n) > this.EoM_data[this.EoM_data.length - 1].date) {
-				new_values.push(new CFElement(m(n), 0));
-				n--;
-			}
-			this.EoM_data.push(...new_values);
-
-			// Quarters
-			n = 0;
-			new_values = [];
-
-			while (q(n) > this.EoQ_data[this.EoQ_data.length - 1].date) {
-				new_values.push(new CFElement(q(n), 0));
-				n--;
-			}
-			this.EoQ_data.push(...new_values);
-
-			// Years
-			n = 0;
-			new_values = [];
-
-			while (y(n) > this.EoY_data[this.EoY_data.length - 1].date) {
-				new_values.push(new CFElement(y(n), 0));
-				n--;
-			}
-			this.EoY_data.push(...new_values);
-
-			// Sort
-			this.EoM_data.sort((a, b) => a.date - b.date);
-
-			this.EoQ_data.sort((a, b) => a.date - b.date);
-
-			this.EoY_data.sort((a, b) => a.date - b.date);
+			currentDate = currentDate.EoPeriod(interval, 1);
 		}
 
-		return this.range;
-	}
-
-	selectDateInterval(interval) {
-		switch (interval) {
-			case CFLine.time_interval.month:
-				return this.EoM_data;
-				break;
-			case CFLine.time_interval.quarter:
-				return this.EoQ_data;
-				break;
-			case CFLine.time_interval.year:
-				return this.EoY_data;
-				break;
-			default:
-				return this.raw_data;
-				break;
-		}
-	}
-
-	getValueAtDate(date, time_interval) {
-		let data = this.selectDateInterval(time_interval);
-		let ret_value = data.has(date);
-
-		if (ret_value) return ret_value;
-		else return 0;
+		return lineData;
 	}
 
 	/**
-	 * Get date range in month, quarters, years
-	 * @param {CFLine.time_interval} date_type frequency of data
-	 * @returns Array of the dates in the range of this dataset
+	 * Returns the value for a specific date
+	 * @param {CFDate} date the date
+	 * @param {CFDate.time_interval} interval either month, quarter or year
+	 * @returns {number} Computed value for this date and time interval
 	 */
-	getDates(time_interval) {
-		const data = this.selectDateInterval(time_interval);
-		const dates = data.map((e) => e.date);
+	getValueAtDate(date, interval) {
+		// this should evaluate a function or return a value
+		// To be implemented
 
-		return dates;
+		let period_end = date.EoPeriod(interval, 0);
+		let period_start = date.EoPeriod(interval, -1);
+
+		let aggregatedValue = 0;
+
+		for (let i = 0; i < this.raw_data.length; i++) {
+			const dataPoint = this.raw_data[i];
+			if (
+				dataPoint.date > period_start.value &&
+				dataPoint.date < period_end.value
+			) {
+				aggregatedValue += dataPoint.value;
+			}
+		}
+
+		return aggregatedValue;
 	}
 
-	getValues(time_interval) {
-		const data = this.selectDateInterval(time_interval);
-		const values = data.map((e) => e.value);
+	/**
+	 * Sorts an array of CFElement objects by their date property and returns the sorted date values.
+	 *
+	 * @returns {Date[]} - An array containing the date values sorted in ascending order.
+	 */
+	getRawDataDates() {
+		// Custom comparison function to sort by date
+		function compareDates(a, b) {
+			return a.date - b.date;
+		}
 
-		return values;
+		// Clone the array to avoid modifying the original array
+		const clonedElements = [...this.raw_data];
+
+		// Sort the cloned array by date
+		clonedElements.sort(compareDates);
+
+		// Extract and return sorted date values
+		return clonedElements.map((cfElement) => cfElement.date);
 	}
 
-	getLineData(time_interval) {
-		const data = this.selectDateInterval(time_interval);
-		return data;
+	/**
+	 * Finds the minimum and maximum date values in an array of CFElement objects.
+	 *
+	 * @returns {{ minDate: Date | null, maxDate: Date | null }} - An object containing the minimum and maximum date values, or null if the input array is empty.
+	 */
+	findMinMaxDates() {
+		if (this.raw_data.length === 0) {
+			return { minDate: null, maxDate: null };
+		}
+
+		// Custom comparison function to find min and max dates
+		function compareDates(a, b) {
+			return a.date - b.date;
+		}
+
+		// Clone the array to avoid modifying the original array
+		const clonedElements = [...this.raw_data];
+
+		// Sort the cloned array by date
+		clonedElements.sort(compareDates);
+
+		// Get the minimum and maximum dates
+		const minDate = clonedElements[0].date;
+		const maxDate = clonedElements[clonedElements.length - 1].date;
+
+		return { minDate, maxDate };
 	}
+
 
 	/**
 	 * Insert a CF element in the dataset
@@ -186,32 +144,6 @@ export class CFLine {
 			a.date - b.date;
 		});
 
-		this.updateDateRange(cf.date);
-
-		let idx, m, q, y;
-
-		// Add value to monthly data
-		m = new CFDate(cf.date).EoMonth().value;
-		idx = this.EoM_data.findIndex((e) => e.date == m);
-		if (idx != -1) {
-			this.EoM_data[idx].value += cf.value;
-		} else throw "monthly array missing date";
-
-		// Add value to quarterly data
-		q = new CFDate(cf.date).EoQuarter().value;
-		idx = this.EoQ_data.findIndex((e) => e.date == q);
-		if (idx != -1) {
-			this.EoQ_data[idx].value += cf.value;
-		} else throw "quarterly array missing date";
-
-		// Add value to yearly data
-		y = new CFDate(cf.date).EoYear().value;
-		idx = this.EoY_data.findIndex((e) => e.date == y);
-		if (idx != -1) {
-			this.EoY_data[idx].value += cf.value;
-		} else throw "yearly array missing date";
-
-		return this;
 	}
 
 	/**
@@ -228,39 +160,4 @@ export class CFLine {
 		});
 		return this;
 	}
-
-	/*	aggregate(endPeriodFunc, months_interval) {
-		let dates = [...this.daily_data.keys()];
-		let min_date = endPeriodFunc(Math.min(...dates));
-		let max_date = endPeriodFunc(Math.max(...dates));
-
-		let dt = min_date;
-
-		let aggregated_map = new Map();
-		while (dt <= max_date) {
-			aggregated_map.set(dt, 0);
-			dt = new CFDate(dt).addMonths(months_interval).value;
-		}
-
-		for (const [k, v] of this.daily_data) {
-			let date_updating = endPeriodFunc(k);
-			aggregated_map.set(
-				date_updating,
-				aggregated_map.get(date_updating) + v
-			);
-		}
-
-		return aggregated_map;
-	}
-
-	aggregateMonthly() {
-		return this.aggregate((a) => new CFDate(a).EoMonth(), 1);
-	}
-	aggregateQuarterly() {
-		return this.aggregate((a) => new CFDate(a).EoQuarter(), 3);
-	}
-	aggregateYearly() {
-		return this.aggregate((a) => new CFDate(a).EoYear(), 12);
-	}
-*/
 }

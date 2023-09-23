@@ -1,9 +1,8 @@
-import {CFDataSet} from './CFEngine/CFDataset.js'
-import { CFLine } from './CFEngine/Line.js';
-import { CFDate } from './CFEngine/CFDate.js';
-import { Scrollbar } from './scrollbar.js';
-import './styles.scss';
-
+import { CFDataSet } from "./CFEngine/CFDataset.js";
+import { CFLine } from "./CFEngine/Line.js";
+import { CFDate } from "./CFEngine/CFDate.js";
+import { Scrollbar } from "./scrollbar.js";
+import "./styles.scss";
 
 let testdata = [
 	{
@@ -56,7 +55,10 @@ class CFXTable {
 		this.dataset = new CFDataSet();
 		this.id_counter = 0;
 
-		this.time_interval = CFLine.time_interval.quarter;
+		this.time_interval = CFDate.time_interval.quarter;
+		// this.d_start = new CFDate(CFDate.parse("2023-01-05"));
+		// this.dataset.datesRange.max = CFDate.parse("2027-11-12");
+
 		this.cf_column_count;
 
 		this.column = {
@@ -101,9 +103,11 @@ class CFXTable {
 					'<div class="row-command row-delete" ><i class="bi bi-x row-head-details"></i></div>' +
 					'<div class="row-command row-edit"><i class="bi bi-three-dots-vertical row-head-details"></i></div>'
 			);
-			
+
 		row_head.find(".row-delete")[0].addEventListener("click", (event) => {
-			const row_id = parseInt($(event.currentTarget.parentNode).attr("data-rowid"));
+			const row_id = parseInt(
+				$(event.currentTarget.parentNode).attr("data-rowid")
+			);
 			this.rowDelete(row_id);
 		});
 
@@ -115,8 +119,6 @@ class CFXTable {
 			.addClass("row row-total")
 			// .attr("data-rowid", newid)
 			.html("0.00");
-
-		let interval = this.time_interval;
 
 		let cf_html = "";
 		for (let i = 0; i < this.cf_column_count; i++) {
@@ -156,8 +158,8 @@ class CFXTable {
 		this.column.cf.append(new_row.cf);
 	}
 
-	rowNew(){
-		let last_line = this.dataset.addLine('new name', null);
+	rowNew() {
+		let last_line = this.dataset.addLine("new name", null);
 		this.rowAdd(last_line);
 
 		this.cellEvents();
@@ -170,7 +172,6 @@ class CFXTable {
 	 */
 	rowUpdate(row, line_data) {
 		let id = line_data.id;
-		let cf = line_data.getValues;
 
 		row.row_head.attr("data-rowid", id);
 		row.total_row.attr("data-rowid", id);
@@ -179,23 +180,28 @@ class CFXTable {
 		row.row_head.find(".row-name").text(line_data.line_name);
 
 		let cf_html = "";
-		line_data.getValues(this.time_interval).forEach((element) => {
-			cf_html +=
-				'<div class="col cell"><span>' +
-				CFXTable.numberFormatting(element) +
-				"</span></div>";
-		});
+		line_data
+			.getValues(
+				new CFDate(this.dataset.datesRange.min),
+				new CFDate(this.dataset.datesRange.max),
+				this.time_interval
+			)
+			.forEach((element) => {
+				cf_html +=
+					'<div class="col cell"><span>' +
+					CFXTable.numberFormatting(element) +
+					"</span></div>";
+			});
 
 		row.cf[0].innerHTML = cf_html;
 
 		return row;
 	}
 
-	rowDelete(id){
+	rowDelete(id) {
 		this.rowSelect(id).remove();
 		this.dataset.removeLine(id);
 	}
-
 
 	// Cells interaction
 
@@ -250,10 +256,9 @@ class CFXTable {
 		this.updateHeader(dates);
 		this.cf_column_count = dates.length;
 
-		for(const i of this.dataset.CFlines){
+		for (const i of this.dataset.CFlines) {
 			this.rowAdd(i);
 		}
-		
 
 		this.cellEvents();
 	}
@@ -273,7 +278,6 @@ class CFXTable {
 
 		headerRow.html(header_content);
 	}
-
 
 	static numberFormatting(n) {
 		return n.toLocaleString();

@@ -12,6 +12,9 @@ export class CFDate {
 		return d.getTime();
 	}
 
+	static time_interval = { day: 0, month: 1, quarter: 2, year: 3 };
+
+
 	addMonths(n = 0) {
 		let month = this.date_obj.getMonth() + n;
 		let year = this.date_obj.getFullYear();
@@ -48,6 +51,23 @@ export class CFDate {
 		let year = this.date_obj.getFullYear() + n;
 		let new_date = new Date(year, 12, 0).getTime();
 		return new CFDate(new_date);
+	}
+
+	EoPeriod(interval, n=0){
+		switch (interval) {
+			case CFDate.time_interval.month:
+				return this.EoMonth(n);
+				break;
+			case CFDate.time_interval.quarter:
+				return this.EoQuarter(n);
+				break;
+			case CFDate.time_interval.year:
+				return this.EoYear(n);
+				break;
+			default:
+				throw new Error("Invalid interval");
+				break;
+		}
 	}
 
    static toString(value, format = 'dd/mm/yyyy'){
