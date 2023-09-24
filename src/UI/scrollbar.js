@@ -1,3 +1,5 @@
+import "./scrollbar_style.scss"
+
 export class Scrollbar {
 	constructor(scrollbar, wrapper) {
 		this.bar = scrollbar;
