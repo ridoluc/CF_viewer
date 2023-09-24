@@ -4,7 +4,7 @@ import "./styles.scss";
 
 let testdata = [
 	{
-		name: "test name",
+		name: "First Line",
 		cf: [
 			{ date: "2023-02-23", value: -10000 },
 			{ date: "2023-04-01", value: 10 },

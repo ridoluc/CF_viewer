@@ -218,7 +218,7 @@ export class CFXTable {
 	}
 
 	updateHeader(dates) {
-		let headerRow = $(".column-header>.row");
+		let headerRow = $(".table-header>.row");
 
 		let header_content = "";
 

@@ -1,20 +1,27 @@
+@font-face {
+   font-family: 'Roboto Mono';
+   src: url(../../assets/fonts/RobotoMono-VariableFont_wght.ttf);
+}
+
 /* Variables */
 $primary-bg-color: #fff;
-$box-shadow: 4px 4px 8px 4px #e9e9e9;
 $table-bg-color: #f6f7f8;
 $border-color: #d6e0ef;
+
+$font-size: 11px;
+$row-height: 35px;
+$cell-width: 90px;
+
+
 
 /* Table styling */
 .cf-table-wrap {
 	background-color: $primary-bg-color;
-	border-radius: 5px;
-	box-shadow: $box-shadow;
+	box-shadow: 4px 4px 8px 4px #e9e9e9;
 }
 
 #CFXTable {
-	font-size: 0.7em;
-	font-weight: 300;
-	padding: 10px 15px;
+   font-size: $font-size;
 
 	.row,
 	.row > *,
@@ -27,37 +34,36 @@ $border-color: #d6e0ef;
 		margin: 0px 0px;
 		overflow-y: scroll;
 		padding-bottom: 20px;
+      margin: 0px 5px;
 	}
 
 	.table-layout {
 		display: grid;
 		grid-template-columns: 190px 80px 1fr;
 		grid-template-areas: "row-head-area total-area cf-area";
-		column-gap: 10px;
 	}
 
-	.column-header {
+	.table-header {
 		display: flex;
 		align-items: center;
 		min-height: 40px;
-		border-bottom: 1px solid $border-color;
-		background-color: $table-bg-color;
-		font-weight: bold;
+		border-bottom: 0.5px solid $border-color;
+
+      .row:hover{
+         background-color: unset;
+      }
 	}
 
-	.column-header .date {
-	}
+
 }
 
-/* ROOLBOX */
+/* COMMANDS */
 #CFXTable{
-   .toolbox {
-		height: 30px;
+   .commands {
+		height: 45px;
 		width: 100%;
 		display: block;
-		background-color: #f2f2f2;
-		border-radius: 5px;
-		margin-bottom: 20px;
+		background-color: #e1e1e1;
 	}
 }
 
@@ -66,8 +72,7 @@ $border-color: #d6e0ef;
 	.row {
 		display: flex;
 		align-items: center;
-		min-height: 30px;
-		border-bottom: 1px dotted #f1f1f1;
+		min-height: $row-height;
 	}
 
 	.row:hover,
@@ -95,7 +100,6 @@ $border-color: #d6e0ef;
 
 	.column-total {
 		grid-area: total-area;
-		font-weight: 700;
 
       & > * {
          text-align: center;
@@ -135,9 +139,6 @@ $border-color: #d6e0ef;
 		}
 	}
 
-	.row-select {
-	}
-
 	.row-command {
 		display: inline-flex;
 		padding: 0px 8px;
@@ -146,10 +147,10 @@ $border-color: #d6e0ef;
 
 		& > i {
 			align-self: center;
-			font-size: 1.1em;
+			font-size: 1.3em;
 		}
 
-		&.hover {
+		&:hover {
 			background-color: #f4f4f4;
 		}
 	}
@@ -175,7 +176,7 @@ $border-color: #d6e0ef;
 		overflow-x: scroll;
 
 		.col {
-			width: 90px;
+			width: $cell-width;
 			text-align: right;
 			padding-right: 2px;
 		}
@@ -186,12 +187,6 @@ $border-color: #d6e0ef;
 				border-bottom: 1px dotted rgb(188, 188, 188);
 				width: 90%;
 				margin-bottom: -2px;
-			}
-
-			&.selected {
-				// border: 0.8px solid rgb(88, 109, 242) ;
-				// margin-right: -0.8px;
-				// background-color: #c6c6ff;
 			}
 
 			span {
