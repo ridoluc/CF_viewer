@@ -16,8 +16,7 @@ export class CFXTable {
 		this.cf_column_count;
 
 		this.column = {
-			row_head: $(".column-row-head"),
-			total: $(".column-total"),
+			row_head: $(".row-head"),
 			cf: $(".cf"),
 		};
 	}
@@ -46,7 +45,7 @@ export class CFXTable {
 		// const newid = line_data.id;
 
 		const row_head = $("<div>")
-			.addClass("row row-head")
+			.addClass("row")
 			// .attr("data-rowid", newid)
 			.html(
 				'<div class="row-start-cell">' +
@@ -55,7 +54,8 @@ export class CFXTable {
 					"</div>" +
 					'<div class="row-name">Line Name</div>' +
 					'<div class="row-command row-delete" ><i class="bi bi-x row-head-details"></i></div>' +
-					'<div class="row-command row-edit"><i class="bi bi-three-dots-vertical row-head-details"></i></div>'
+					'<div class="row-command row-edit"><i class="bi bi-three-dots-vertical row-head-details"></i></div>'+
+               '<div class="total"><span>0</span></div>'
 			);
 
 		row_head.find(".row-delete")[0].addEventListener("click", (event) => {
@@ -69,10 +69,6 @@ export class CFXTable {
 			this.rowNew();
 		});
 
-		const total_row = $("<div>")
-			.addClass("row row-total")
-			// .attr("data-rowid", newid)
-			.html("0.00");
 
 		let cf_html = "";
 		for (let i = 0; i < this.cf_column_count; i++) {
@@ -81,7 +77,7 @@ export class CFXTable {
 
 		const cf = $("<div>").addClass("row row-cf").html(cf_html);
 
-		[row_head, total_row, cf].forEach((i) =>
+		[row_head, cf].forEach((i) =>
 			i.hover(
 				function () {
 					const row_id = parseInt($(this).attr("data-rowid"));
@@ -98,7 +94,6 @@ export class CFXTable {
 
 		return {
 			row_head: row_head,
-			total_row: total_row,
 			cf: cf,
 		};
 	}
@@ -108,7 +103,6 @@ export class CFXTable {
 		this.rowUpdate(new_row, line_data);
 
 		this.column.row_head.append(new_row.row_head);
-		this.column.total.append(new_row.total_row);
 		this.column.cf.append(new_row.cf);
 	}
 
@@ -128,7 +122,6 @@ export class CFXTable {
 		let id = line_data.id;
 
 		row.row_head.attr("data-rowid", id);
-		row.total_row.attr("data-rowid", id);
 		row.cf.attr("data-rowid", id);
 
 		row.row_head.find(".row-name").text(line_data.line_name);
