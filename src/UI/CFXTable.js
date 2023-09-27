@@ -1,6 +1,7 @@
 import { CFDataSet } from "../CFEngine/CFDataset.js";
 import { CFLine } from "../CFEngine/Line.js";
 import { CFDate } from "../CFEngine/CFDate.js";
+import { updateHeader } from "./header.js";
 import "./table_style.scss"
 
 export class CFXTable {
@@ -107,7 +108,7 @@ export class CFXTable {
 	}
 
 	rowNew() {
-		let last_line = this.dataset.addLine("new name", null);
+		let last_line = this.dataset.addLine("New Row Name", null);
 		this.rowAdd(last_line);
 
 		this.cellEvents();
@@ -200,7 +201,7 @@ export class CFXTable {
 
 	update() {
 		let dates = this.dataset.getDates(this.time_interval);
-		this.updateHeader(dates);
+		updateHeader(dates);
 		this.cf_column_count = dates.length;
 
 		for (const i of this.dataset.CFlines) {
@@ -210,21 +211,7 @@ export class CFXTable {
 		this.cellEvents();
 	}
 
-	updateHeader(dates) {
-		let headerRow = $(".table-header>.row");
 
-		let header_content = "";
-
-		dates.forEach((d) => {
-			header_content +=
-				'<div class="col date">' +
-				"<span>" +
-				CFDate.toString(d, "mmm yyyy") +
-				"</span></div>";
-		});
-
-		headerRow.html(header_content);
-	}
 
 	static numberFormatting(n) {
 		return n.toLocaleString();
