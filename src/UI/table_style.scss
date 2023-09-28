@@ -26,8 +26,55 @@ $cell-width: 90px;
    .commands {
       height: 45px;
       width: 100%;
-      display: block;
+      display: flex;
+      align-items: center;
+      flex-direction: row;
       background-color: #e1e1e1;
+      padding: 5px 15px;
+      gap: 11px;
+
+
+
+      .button-group {
+         display: flex;
+         align-items: center;
+         flex-direction: row;
+         flex-wrap: wrap;
+         padding: 5px 15px;
+         gap: 11px;
+
+         &:not(:last-child){
+            padding-right: 10px;
+            border-right: 1px solid #93b781;
+         }
+
+         .label {
+            font-size: 10px;
+            align-self: flex-start;
+         }
+
+         .button {
+            background-color: #cdcdcd;
+            width: 25px;
+            height: 25px;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            
+            &:hover {
+               background-color: #b5b5b5;
+            }
+
+            &:active {
+               background-color: #8c8c8c;
+
+            }
+
+         }
+      }
+
    }
 }
 
@@ -107,6 +154,20 @@ $cell-width: 90px;
 
       .row-name {
          margin-right: auto;
+
+         input {
+            all: unset;
+            line-height: 20px;
+            border-bottom: 1px dotted rgb(188, 188, 188);
+            width: 90%;
+            margin-bottom: -2px;
+
+         }
+
+         input:focus_visible {
+            all: unset;
+         }
+
       }
 
       .add-row {

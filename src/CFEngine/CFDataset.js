@@ -90,4 +90,15 @@ export class CFDataSet {
 		this.datesRange.max = max;
 		this.datesRange.min = min;
 	}
+
+	setLineData(line_id, data) {
+		line = this.getLine(line_id);
+
+		// Loop through the updates object and apply changes
+		for (const key in data) {
+			if (data.hasOwnProperty(key)) {
+				line[key] = data[key];
+			}
+		}
+	}
 }

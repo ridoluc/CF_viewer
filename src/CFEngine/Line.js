@@ -14,9 +14,6 @@ export class CFLine {
 		this.id = _id;
 		this.line_name = _name;
 		this.raw_data = []; //daily
-		this.EoM_data = []; // Monthly
-		this.EoQ_data = []; // Quarterly
-		this.EoY_data = []; // Yearly
 
 		/** Range of dates (end of months) expressed in millisec */
 		this.range = { max: null, min: null };
