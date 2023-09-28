@@ -39,7 +39,7 @@ $(document).ready(function () {
 	Table = new CFXTable();
 	Table.dataset.addLine(testdata[0].name, testdata[0].cf);
 	Table.dataset.addLine(testdata[1].name, testdata[1].cf);
-	Table.update();
+	Table.create();
 	scrollbar = new Scrollbar(
 		document.getElementById("scroll-wrapper"),
 		document.getElementsByClassName("cf")[0]

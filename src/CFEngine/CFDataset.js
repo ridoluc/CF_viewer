@@ -19,7 +19,7 @@ export class CFDataSet {
 		let currentDate = new CFDate(this.datesRange.min);
 		currentDate = currentDate.EoPeriod(time_interval, 0);
 		let stopDate = new CFDate(this.datesRange.max);
-		stopDate = stopDate.EoPeriod(time_interval,0);
+		stopDate = stopDate.EoPeriod(time_interval, 0);
 
 		while (currentDate.value <= stopDate.value) {
 			dates.push(currentDate.value);
@@ -33,7 +33,19 @@ export class CFDataSet {
 		return this.CFlines.find((e) => e.id == id);
 	}
 
-	getLineData(id) {}
+	getLineData(id, time_interval) {
+		let line = this.getLine(id); //<<------- this is WRONG. update with proper positioning
+
+		return {
+			id: line.id,
+			name: line.line_name,
+			values: line.getValues(
+				new CFDate(this.datesRange.min),
+				new CFDate(this.datesRange.max),
+				time_interval
+			),
+		};
+	}
 
 	addLine(name, data) {
 		let new_line = new CFLine(this.idCounter++, name, data);
@@ -44,15 +56,17 @@ export class CFDataSet {
 	}
 
 	removeLine(id) {
-		let idx = this.CFlines.indexOf((e) => (e.id = id));
-		this.CFlines.splice(idx, 1);
+		let idx = this.CFlines.findIndex((e) => e.id === id);
+		if (idx !== -1) {
+			this.CFlines.splice(idx, 1);
+		}
 	}
 
 	/**
 	 * Updates the range of dates for each line
 	 */
 	updateDatesRange() {
-		let min = this.datesRange.min; 
+		let min = this.datesRange.min;
 		let max = this.datesRange.max;
 
 		// Find Min and max
