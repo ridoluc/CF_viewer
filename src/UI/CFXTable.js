@@ -33,7 +33,7 @@ export class CFXTable {
 	create() {
 		// Update CF
 		for (const line of this.dataset.CFlines) {
-			let new_row = this.rowCreate(line.id);
+			let new_row = rowCreate(line.id, this);
 
 			this.column.row_head.append(new_row.row_head);
 			this.column.cf.append(new_row.cf);
@@ -98,7 +98,7 @@ export class CFXTable {
 
 		// this.rowAdd(last_line);
 
-		let new_row = this.rowCreate(last_line.id);
+		let new_row = rowCreate(last_line.id, this);
 
 		this.column.row_head.append(new_row.row_head);
 		this.column.cf.append(new_row.cf);
@@ -177,55 +177,6 @@ export class CFXTable {
 	static numberFormatting(n) {
 		if (n == 0) return "-";
 		return n.toLocaleString();
-	}
-
-	rowCreate(row_id) {
-		const row_head = $("<div>")
-			.addClass("row")
-			.attr("data-rowid", row_id)
-			.html(
-				'<div class="row-start-cell">' +
-					'<div class="row-select"></div>' +
-					'<!-- <div class="add-row"></div> -->' +
-					"</div>" +
-					'<div class="row-name editable"><span>Line Name</span></div>' +
-					'<div class="row-command row-delete" ><i class="bi bi-x row-head-details"></i></div>' +
-					'<div class="row-command row-edit"><i class="bi bi-three-dots-vertical row-head-details"></i></div>' +
-					'<div class="total"><span>0</span></div>'
-			);
-
-		const cf = $("<div>").addClass("row row-cf").attr("data-rowid", row_id);
-
-		[row_head, cf].forEach((i) =>
-			i.hover(
-				function () {
-					const row_id = parseInt($(this).attr("data-rowid"));
-					const row_columns = $('.row [data-rowid="' + row_id + '"]');
-					row_columns.addClass("hovered");
-				},
-				function (e) {
-					const row_id = parseInt($(this).attr("data-rowid"));
-					const row_columns = $('.row [data-rowid="' + row_id + '"]');
-					row_columns.removeClass("hovered");
-				}
-			)
-		);
-
-		row_head.find(".row-delete").on("click", (event) => {
-			const row_id = parseInt(
-				$(event.currentTarget.parentNode).attr("data-rowid")
-			);
-			this.rowDelete(row_id);
-		});
-
-		row_head.find(".add-row").on("click", (event) => {
-			this.addRow();
-		});
-
-		return {
-			row_head: row_head,
-			cf: cf,
-		};
 	}
 
 	commandsEventsHandler(event) {

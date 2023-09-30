@@ -6,7 +6,7 @@
  * @param {function} rowDeleteHandler - The event handler function for deleting the row.
  * @returns {Object} An object containing references to the created row elements: row_head and cf.
  */
-function rowCreate(row_id, addRowHandler, rowDeleteHandler) {
+export function rowCreate(row_id, context) {
 	// Create row head element
 	const row_head = $("<div>")
 	  .addClass("row")
@@ -43,12 +43,12 @@ function rowCreate(row_id, addRowHandler, rowDeleteHandler) {
 	// Click event for row delete
 	row_head.find(".row-delete").on("click", (event) => {
 	  const row_id = parseInt($(event.currentTarget).parent().attr("data-rowid"));
-	  rowDeleteHandler(row_id);
+	  context.rowDelete(row_id);
 	});
  
 	// Click event for adding a row
 	row_head.find(".add-row").on("click", (event) => {
-	  addRowHandler();
+	  context.addRow();
 	});
  
 	return {
