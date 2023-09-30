@@ -2,13 +2,14 @@ import "./scrollbar_style.scss"
 
 export class Scrollbar {
 	constructor(scrollbar, wrapper) {
-		this.bar = scrollbar;
-		this.wrapper = wrapper;
+		this.bar = scrollbar; // The actual element
+		this.wrapper = wrapper; // The CF rows
 		this.scrollWidth = this.wrapper.scrollWidth;
-		this.outerWidth = this.wrapper.offsetWidth
+		this.outerWidth = this.wrapper.offsetWidth; //width of visible part
 
 		this.cursor = document.getElementById("scroll-cursor");
 
+		this.bar.style.width = this.outerWidth+'px';
 		this.setCursorWidth();
 
 		this.cursor.style.left = "0px";
@@ -64,8 +65,8 @@ export class Scrollbar {
 
 	setCursorWidth(){		
 		const bar_width = this.bar.offsetWidth;
-		const w_in = this.scrollWidth
-		const w_out = this.outerWidth
+		const w_in = this.wrapper.scrollWidth
+		const w_out = this.wrapper.offsetWidth
 		
 		if(!w_in) return bar_width;
 

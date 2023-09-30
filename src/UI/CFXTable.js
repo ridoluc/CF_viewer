@@ -1,6 +1,8 @@
 import { CFDataSet } from "../CFEngine/CFDataset.js";
 import { CFDate } from "../CFEngine/CFDate.js";
 import { updateHeader } from "./header.js";
+import { Scrollbar } from "./scrollbar.js";
+
 import { rowCreate } from "./row.js";
 import "./table_style.scss";
 
@@ -9,7 +11,7 @@ export class CFXTable {
 		this._table = $("#CFXTable");
 		this.dataset = new CFDataSet();
 
-		this.time_interval = CFDate.time_interval.year;
+		this.time_interval = CFDate.time_interval.month;
 		// this.d_start = new CFDate(CFDate.parse("2023-01-05"));
 		// this.dataset.datesRange.max = CFDate.parse("2027-11-12");
 
@@ -22,6 +24,10 @@ export class CFXTable {
 		this.commands_panel.addEventListener("click", (event) => {
 			this.commandsEventsHandler(event);
 		});
+
+
+
+		this.scrollbar;
 	}
 
 	create() {
@@ -33,7 +39,15 @@ export class CFXTable {
 			this.column.cf.append(new_row.cf);
 		}
 
+
+		this.scrollbar = new Scrollbar(
+			document.getElementById("scroll-wrapper"),
+			document.getElementsByClassName("cf")[0]
+		);
+
 		this.update();
+
+
 	}
 
 	update() {
@@ -42,7 +56,7 @@ export class CFXTable {
 
 		// Update Header
 		let dates = this.dataset.getDates(this.time_interval);
-		updateHeader(dates);
+		updateHeader(dates,this.time_interval);
 
 		// Update CF
 		for (const line of this.dataset.CFlines) {
@@ -59,6 +73,10 @@ export class CFXTable {
 
 		// Attach events
 		this.attachEvents();
+
+		// Adjust scollbar
+		this.scrollbar.setCursorWidth();
+
 	}
 
 	rowSelect(id) {
@@ -168,7 +186,7 @@ export class CFXTable {
 			.html(
 				'<div class="row-start-cell">' +
 					'<div class="row-select"></div>' +
-					'<div class="add-row"></div>' +
+					'<!-- <div class="add-row"></div> -->' +
 					"</div>" +
 					'<div class="row-name editable"><span>Line Name</span></div>' +
 					'<div class="row-command row-delete" ><i class="bi bi-x row-head-details"></i></div>' +
@@ -240,6 +258,23 @@ export class CFXTable {
 					this.time_interval = CFDate.time_interval.year
 					break;
 
+				case "scrollbar":
+					console.log("scrollbar");
+					const scrollbar_container = document.getElementById('scroll-section');
+					scrollbar_container.classList.toggle('hidden');
+					// scrollbar_container.style.toggle('hidden');
+					break;
+
+				case "chart":
+					console.log("chart");
+				
+					break;
+
+				case "add-line":
+					console.log("add line");
+					this.addRow()
+					break
+				
 				default:
 					
 					break;
@@ -261,15 +296,20 @@ function updateRow(row, line_data) {
 
 	row.row_head.find(".row-name").text(line_data.name);
 
-	let cf_html = "";
-	line_data.values.forEach((element) => {
-		cf_html +=
-			'<div class="col cell"><span>' +
-			CFXTable.numberFormatting(element) +
-			"</span></div>";
-	});
+	let cf_list = []
+	line_data.values.forEach((value) => {
+		const div = document.createElement('div');
+		div.classList.add('col', 'cell');
+		
+		const span = document.createElement('span');
+		span.textContent = CFXTable.numberFormatting(value);
+		if(value<0) span.classList.add('negative-number');
+		
+		div.appendChild(span);
+		cf_list.push(div);
+	 });
 
-	row.cf[0].innerHTML = cf_html;
+	row.cf[0].replaceChildren(...cf_list);
 
 	return row;
 }

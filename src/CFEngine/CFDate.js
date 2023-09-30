@@ -75,20 +75,38 @@ export class CFDate {
       let date = dt.getDate();
       let month_numb = dt.getMonth();
       let month = ['January','February','March','April','May','June','July','August','September','October','November','December'][month_numb];
+      let quarter = ['Q1','Q1','Q1','Q2','Q2','Q2','Q3','Q3','Q3','Q4','Q4','Q4'][month_numb];
       let year = dt.getFullYear();
 
       switch (format) {
-         case 'yyyy':
-            return ''+ year;
-         case 'mmm yyyy':
-            return month.slice(0,3) + ' ' + year;
-         case 'mm/yyyy':
-            return   ('0'+(month_numb+1)).slice(-2) +'/'
-                     + year;
-         default:
-            return   ('0'+date).slice(-2) +'/'
-                     +('0'+(month_numb+1)).slice(-2)+'/'
-                     +year;
-      }
+			case "yyyy":
+				return "" + year;
+				break;
+			case "QQ":
+				return "" + quarter;
+				break;
+
+			case "mmmm":
+				return month;
+				break;
+
+			case "mmm yyyy":
+				return month.slice(0, 3) + " " + year;
+				break;
+
+			case "mm/yyyy":
+				return ("0" + (month_numb + 1)).slice(-2) + "/" + year;
+				break;
+
+			default:
+				return (
+					("0" + date).slice(-2) +
+					"/" +
+					("0" + (month_numb + 1)).slice(-2) +
+					"/" +
+					year
+				);
+				break;
+		}
    }
 }
