@@ -221,6 +221,7 @@ export class CFXTable {
 		row_head.find(".add-row").on("click", (event) => {
 			this.addRow();
 		});
+
 		return {
 			row_head: row_head,
 			cf: cf,
@@ -228,7 +229,7 @@ export class CFXTable {
 	}
 
 	commandsEventsHandler(event) {
-		// Check if the clicked element has a "data-action" attribute
+		// Check if the clicked element has a "data-command" attribute
 
 		const clickedElement = event.target.closest('[data-command]');
 
