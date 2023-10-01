@@ -9,7 +9,7 @@ $table-bg-color: #f6f7f8;
 $border-color: #d6e0ef;
 
 $font-size: 11px;
-$row-height: 35px;
+$row-height: 30px;
 $cell-width: 90px;
 
 
@@ -92,7 +92,7 @@ $cell-width: 90px;
 
    .table-container {
       margin: 0px 0px;
-      margin: 5px 5px 20px 5px;
+      margin: 5px 10px 20px 10px;
    }
 
    .table-layout {
@@ -136,23 +136,35 @@ $cell-width: 90px;
    .row {
       display: flex;
       align-items: center;
-      min-height: $row-height;
+      height: $row-height;
 
       &:hover,
       &.hovered {
          background-color: $table-bg-color;
       }
 
-      &:hover .row-head-details {
+      &:hover .row-head-details,
+      &:hover .row-start-cell {
          opacity: 1;
       }
 
 
+      &.row-style-total1 {
+         border-top: 1px solid #6e90c8;
+         border-top-style: dashed;
+         font-weight: 600;
+         background-color: #f5f9ff;
+         height: 23px;
+         margin-bottom: 6px;
+      }
 
-      .row-style-total {
-         border-top: 2px solid #eee;
+      &.row-style-total2 {
+         border-top: 3px double #8fa7d4;
          font-weight: 600;
          background-color: #f6f6f6;
+         margin-bottom: 6px;
+         height: 35px;
+
       }
    }
 
@@ -168,7 +180,55 @@ $cell-width: 90px;
       border-right: solid 1px #f0f0f0;
 
       .row-start-cell {
-         width: 20px;
+         opacity: 0;
+         width: 30px;
+         display: flex;
+         justify-content: center;
+
+
+         &:has(input[type="checkbox"]:checked) {
+            opacity: 1;
+         }
+
+
+         input[type="checkbox"] {
+
+            display: none; // Hide the default checkbox
+
+            appearance: none;
+            background-color: #fff;
+            margin: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; // Adjust to fit your layout
+
+            font: inherit;
+            color: #b01414;
+            width: 1.25em;
+            height: 1.25em;
+            border: 0.15em solid #81a3e4;
+            border-radius: 100%;
+            transform: translateY(-0.075em);
+
+            // Style the checkbox when checked
+            &::before {
+               content: "";
+               width: 0.65em;
+               height: 0.75em;
+               transform: scale(0);
+               border-radius: 100%;
+               transition: 120ms transform ease-in-out;
+               box-shadow: inset 1em 1em #1e7fbe;
+            }
+
+            &:checked::before {
+               transform: scale(1);
+
+            }
+
+         }
       }
 
       .row-name {
@@ -271,7 +331,7 @@ $cell-width: 90px;
       column-gap: 3px;
       overflow-x: scroll;
 
-      &::-webkit-scrollbar{
+      &::-webkit-scrollbar {
          display: none;
       }
 
@@ -304,7 +364,7 @@ $cell-width: 90px;
             margin-bottom: -2px;
          }
 
-         
+
 
          &:focus {
             border: 1px solid #81a3e4;
@@ -326,7 +386,7 @@ $cell-width: 90px;
 // UTILS
 #CFXTable {
 
-   .hidden{
+   .hidden {
       display: none !important;
    }
 }

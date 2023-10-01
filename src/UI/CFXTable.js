@@ -156,57 +156,57 @@ export class CFXTable {
 		}
 
 		function deleteInput(elm, context) {
-
 			const edit_cell = elm.currentTarget;
 			let input = $(edit_cell).find("input")[0];
 
-			if(!input) return;
+			if (!input) return;
 			$(input).off("focusout");
-			
+
 			let input_val;
 
 			let row_id, col_id;
 
 			const span = document.createElement("span");
 
-				if (edit_cell.classList.contains("editable")) {
-					if (edit_cell.parentNode)
-						row_id = parseInt(
-							edit_cell.parentNode.getAttribute("data-rowid")
-						);
+			if (edit_cell.classList.contains("editable")) {
+				if (edit_cell.parentNode)
+					row_id = parseInt(
+						edit_cell.parentNode.getAttribute("data-rowid")
+					);
 
-					input_val = input.value ? input.value : "Name";
-					span.textContent = input_val;
+				input_val = input.value ? input.value : "Name";
+				span.textContent = input_val;
 
-					context.dataset.setLineData(row_id, {
-						line_name: input_val,
-					});
-				} else {
-					if (edit_cell.parentNode){
+				context.dataset.setLineData(row_id, {
+					line_name: input_val,
+				});
+			} else {
+				if (edit_cell.parentNode) {
+					row_id = parseInt(
+						edit_cell.parentNode.getAttribute("data-rowid")
+					);
 
-					
-						row_id = parseInt(
-							edit_cell.parentNode.getAttribute("data-rowid")
-						);
-						
-						col_id = parseInt(
-							edit_cell.getAttribute("data-columnid")
-						);
-					}
-
-					input_val = parseFloat(input.value.replaceAll(",", ""));
-					if (!input_val) input_val = 0;
-
-					context.dataset.setCellValue(row_id, col_id, context.time_interval, input_val );
-
-					span.textContent = numberFormatting(input_val);
-					if (input_val < 0) span.classList.add("negative-number");
+					col_id = parseInt(edit_cell.getAttribute("data-columnid"));
 				}
 
-				edit_cell.innerHTML = '';
-				edit_cell.appendChild(span);
+				input_val = parseFloat(input.value.replaceAll(",", ""));
+				if (!input_val) input_val = 0;
 
-				context.update();
+				context.dataset.setCellValue(
+					row_id,
+					col_id,
+					context.time_interval,
+					input_val
+				);
+
+				span.textContent = numberFormatting(input_val);
+				if (input_val < 0) span.classList.add("negative-number");
+			}
+
+			edit_cell.innerHTML = "";
+			edit_cell.appendChild(span);
+
+			context.update();
 		}
 	}
 
@@ -261,6 +261,11 @@ export class CFXTable {
 					this.addRow();
 					break;
 
+				case "line-style":
+					console.log("change style");
+					this.changeLineStyle();
+					break;
+
 				default:
 					break;
 			}
@@ -293,6 +298,50 @@ export class CFXTable {
 			span.textContent = numberFormatting(value);
 			if (value < 0) span.classList.add("negative-number");
 			totalDiv.replaceChildren(span);
+		});
+	}
+
+	changeLineStyle() {
+		const checkedInputs = document.querySelectorAll(
+			'.row-start-cell input[type="checkbox"]:checked'
+		);
+
+		checkedInputs.forEach((input) => {
+			const row_id = input
+				.closest("[data-rowid]")
+				.getAttribute("data-rowid");
+			const rows = document.querySelectorAll(
+				'.row[data-rowid="'+row_id+'"]'
+			);
+
+			rows.forEach((r) => {
+				const classList = ["row-style-total1", "row-style-total2","row-style_std"];
+
+				const classes = r.classList;
+
+				// Find the first class from the list that exists in the element's classes
+				const currentClass = classList.find((className) =>
+					classes.contains(className)
+				);
+
+				if (currentClass) {
+					let currentIndex = classList.indexOf(currentClass);
+
+					if (currentIndex !== -1) {
+						currentIndex = currentIndex + 1;
+						if(currentIndex == classList.length) currentIndex = 0;
+
+						const nextClass = classList[currentIndex];
+
+						// Remove the current class and add the next one
+						classes.remove(currentClass);
+						classes.add(nextClass);
+					}
+				} else if (classList.length > 0) {
+					// If no class from the list exists, add the first class from the list
+					classes.add(classList[0]);
+				}
+			});
 		});
 	}
 }

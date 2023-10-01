@@ -15,7 +15,7 @@ export function rowCreate(row_id, context) {
 	  .attr("data-rowid", row_id)
 	  .html(`
 		 <div class="row-start-cell">
-			<div class="row-select"></div>
+			<div class="row-select"><input type="checkbox"></div>
 			<!-- <div class="add-row"></div> -->
 		 </div>
 		 <div class="row-name editable"><span>Line Name</span></div>
