@@ -20,7 +20,6 @@ $cell-width: 90px;
    box-shadow: 4px 4px 8px 4px #e9e9e9;
 }
 
-
 /* COMMANDS */
 #CFXTable {
    .commands {
@@ -305,13 +304,7 @@ $cell-width: 90px;
             margin-bottom: -2px;
          }
 
-         span {
-            vertical-align: middle;
-
-            &.negative-number {
-               color: #b01414
-            }
-         }
+         
 
          &:focus {
             border: 1px solid #81a3e4;
@@ -320,8 +313,15 @@ $cell-width: 90px;
       }
 
    }
-}
 
+   span {
+      vertical-align: middle;
+
+      &.negative-number {
+         color: #b01414
+      }
+   }
+}
 
 // UTILS
 #CFXTable {

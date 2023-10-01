@@ -71,7 +71,7 @@ export class CFLine {
 			const dataPoint = this.raw_data[i];
 			if (
 				dataPoint.date > period_start.value &&
-				dataPoint.date < period_end.value
+				dataPoint.date <= period_end.value
 			) {
 				aggregatedValue += dataPoint.value;
 			}
@@ -129,7 +129,6 @@ export class CFLine {
 		return { minDate, maxDate };
 	}
 
-
 	/**
 	 * Insert a CF element in the dataset
 	 * @param {CFElement} cf CFElement
@@ -137,10 +136,23 @@ export class CFLine {
 	 */
 	add(cf) {
 		this.raw_data.push(cf);
-		this.raw_data.sort((a, b) => {
-			a.date - b.date;
+		this.raw_data = this.raw_data.sort((a, b) => {
+			return (a.date - b.date);
 		});
+	}
 
+	/**
+	 * Calculate the total sum of elements in the raw_data array.
+	 *
+	 * @returns {number} The sum of all elements in the raw_data array.
+	 */
+	calculateTotal() {
+		// Use the reduce method to calculate the sum of array elements
+		const total = this.raw_data.reduce(
+			(accumulator, currentValue) => accumulator + currentValue.value,
+			0
+		);
+		return total;
 	}
 
 	/**

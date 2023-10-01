@@ -1,4 +1,5 @@
 import { CFDate } from "./CFDate";
+import { CFElement } from "./Element";
 import { CFLine } from "./Line";
 
 export class CFDataSet {
@@ -8,6 +9,13 @@ export class CFDataSet {
 		this.datesRange = { max: null, min: null };
 	}
 
+	/**
+	 * Calculates an array of date values in milliseconds based on a specified time interval.
+	 *
+	 * @param {CFDate.time_interval} time_interval The interval time of the cash flows.
+	 * @returns {Array<number>|null} An array of date values in milliseconds, or null if no cash flows are available.
+	 * @throws {Error} Throws an error if the dates range is null.
+	 */
 	getDates(time_interval) {
 		if (this.CFlines.length == 0) return null;
 
@@ -92,7 +100,7 @@ export class CFDataSet {
 	}
 
 	setLineData(line_id, data) {
-		line = this.getLine(line_id);
+		const line = this.getLine(line_id);
 
 		// Loop through the updates object and apply changes
 		for (const key in data) {
@@ -101,4 +109,24 @@ export class CFDataSet {
 			}
 		}
 	}
+
+	setCellValue(row_id, col, time_interval, new_period_value){
+		const line = this.getLine(row_id);
+
+		const old_period_value = line.getValueAtDate(new CFDate(col),time_interval);
+
+		// Search if the date has associated raw data 
+		const raw_value = line.raw_data.find((entry) => entry.date === col);
+
+		if(raw_value){
+			raw_value.value = new_period_value - (old_period_value - raw_value.value);
+		}
+		else{
+			const new_date_value = new_period_value - old_period_value;
+
+			line.add(new CFElement(col, new_date_value));
+		}
+
+	}
+
 }

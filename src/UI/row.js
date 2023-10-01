@@ -1,3 +1,5 @@
+import { numberFormatting } from "./utils";
+
 /**
  * Creates and configures a row in a tabular interface with interactive elements.
  *
@@ -28,7 +30,7 @@ export function rowCreate(row_id, context) {
 	// Hover effect handlers
 	const hoverInHandler = function () {
 	  const row_id = parseInt($(this).attr("data-rowid"));
-	  const row_columns = $('.row [data-rowid="' + row_id + '"]');
+	  const row_columns = $('.row[data-rowid="' + row_id + '"]');
 	  row_columns.addClass("hovered");
 	};
  
@@ -56,3 +58,39 @@ export function rowCreate(row_id, context) {
 	  cf: cf,
 	};
  }
+
+
+
+/**
+ * Update the data of a table row
+ * @param {Object} row object with components of a row
+ * @param {CFLine} line_data data of the cf line
+ */
+export function updateRow(row, line_data, dates) {
+	row.row_head.attr("data-rowid", line_data.id);
+	row.cf.attr("data-rowid", line_data.id);
+
+	row.row_head.find(".row-name").text(line_data.name);
+
+	let cf_list = []
+	for(let i = 0; i < line_data.values.length; i++){
+		let value = line_data.values[i];
+		const div = document.createElement('div');
+		div.classList.add('col', 'cell');
+
+		div.setAttribute("data-rowid", line_data.id);
+		div.setAttribute("data-columnid", dates[i]);
+
+
+		const span = document.createElement('span');
+		span.textContent = numberFormatting(value);
+		if(value<0) span.classList.add('negative-number');
+		
+		div.appendChild(span);
+		cf_list.push(div);
+	 }
+
+	row.cf[0].replaceChildren(...cf_list);
+
+	return row;
+}

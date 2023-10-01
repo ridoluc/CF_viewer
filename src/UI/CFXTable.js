@@ -2,8 +2,9 @@ import { CFDataSet } from "../CFEngine/CFDataset.js";
 import { CFDate } from "../CFEngine/CFDate.js";
 import { updateHeader } from "./header.js";
 import { Scrollbar } from "./scrollbar.js";
+import { numberFormatting } from "./utils.js";
 
-import { rowCreate } from "./row.js";
+import { rowCreate, updateRow } from "./row.js";
 import "./table_style.scss";
 
 export class CFXTable {
@@ -25,8 +26,6 @@ export class CFXTable {
 			this.commandsEventsHandler(event);
 		});
 
-
-
 		this.scrollbar;
 	}
 
@@ -39,15 +38,12 @@ export class CFXTable {
 			this.column.cf.append(new_row.cf);
 		}
 
-
 		this.scrollbar = new Scrollbar(
 			document.getElementById("scroll-wrapper"),
 			document.getElementsByClassName("cf")[0]
 		);
 
 		this.update();
-
-
 	}
 
 	update() {
@@ -56,7 +52,7 @@ export class CFXTable {
 
 		// Update Header
 		let dates = this.dataset.getDates(this.time_interval);
-		updateHeader(dates,this.time_interval);
+		updateHeader(dates, this.time_interval);
 
 		// Update CF
 		for (const line of this.dataset.CFlines) {
@@ -65,18 +61,17 @@ export class CFXTable {
 				line.id,
 				this.time_interval
 			);
-			updateRow(row, lineData);
+			updateRow(row, lineData, dates);
 		}
 
 		// Update Totals
-		// To DO
+		this.updateTotals();
 
 		// Attach events
 		this.attachEvents();
 
 		// Adjust scollbar
 		this.scrollbar.setCursorWidth();
-
 	}
 
 	rowSelect(id) {
@@ -125,64 +120,100 @@ export class CFXTable {
 			$(this).addClass("selected");
 		});
 
-		cells.dblclick(addInput);
+		cells.dblclick((e) => {
+			addInput(e, this);
+		});
 
-		editable.dblclick(addInput);
+		editable.dblclick((e) => {
+			addInput(e, this);
+		});
 
-		editable.keypress(function (e) {
+		editable.keypress((e) => {
 			if (e.which == 13) {
-				if (e.target.nodeName == "INPUT") deleteInput(e);
+				if (e.target.nodeName == "INPUT") deleteInput(e, this);
 			}
 		});
 
-		cells.keypress(function (e) {
+		cells.keypress((e) => {
 			if (e.which == 13) {
-				if (e.target.nodeName == "INPUT") deleteInput(e);
+				if (e.target.nodeName == "INPUT") deleteInput(e, this);
 				// TO DO: enter edit mode
 			}
 		});
 
-		function addInput(e) {
+		function addInput(e, context) {
+			const cell = e.currentTarget;
+
 			//if there is already an input ignore
-			if (this.firstChild.nodeName == "INPUT") return;
+			if (cell.firstChild.nodeName == "INPUT") return;
 
 			var input = $("<input>", { type: "text" })
-				.val($(this).find("span").text())
-				.focusout(deleteInput);
+				.val(cell.textContent)
+				.focusout(() => deleteInput(e, context));
 
-			$(this).html(input);
+			$(cell).html(input);
 			input.focus();
 		}
 
-		function deleteInput(elm) {
-			let input = $(elm.target);
+		function deleteInput(elm, context) {
+
+			const edit_cell = elm.currentTarget;
+			let input = $(edit_cell).find("input")[0];
+
+			if(!input) return;
+			$(input).off("focusout");
+			
 			let input_val;
-			if (
-				input[0].parentNode &&
-				input[0].parentNode.classList.contains("editable")
-			) {
-				input_val = input.val() ? input.val() : "Name";
 
-				// let row_id = parseInt(input[0].parentNode.parentNode.getAttribute('data-rowid'));
-				// this.dataset.setLineData(row_id,{line_name:input_val});
-			} else {
-				input_val = parseFloat(input.val().replaceAll(",", ""));
-				if (!input_val) input_val = 0;
-				input_val = CFXTable.numberFormatting(input_val);
-			}
-			input.parent().html($("<span>").text(input_val));
+			let row_id, col_id;
+
+			const span = document.createElement("span");
+
+				if (edit_cell.classList.contains("editable")) {
+					if (edit_cell.parentNode)
+						row_id = parseInt(
+							edit_cell.parentNode.getAttribute("data-rowid")
+						);
+
+					input_val = input.value ? input.value : "Name";
+					span.textContent = input_val;
+
+					context.dataset.setLineData(row_id, {
+						line_name: input_val,
+					});
+				} else {
+					if (edit_cell.parentNode){
+
+					
+						row_id = parseInt(
+							edit_cell.parentNode.getAttribute("data-rowid")
+						);
+						
+						col_id = parseInt(
+							edit_cell.getAttribute("data-columnid")
+						);
+					}
+
+					input_val = parseFloat(input.value.replaceAll(",", ""));
+					if (!input_val) input_val = 0;
+
+					context.dataset.setCellValue(row_id, col_id, context.time_interval, input_val );
+
+					span.textContent = numberFormatting(input_val);
+					if (input_val < 0) span.classList.add("negative-number");
+				}
+
+				edit_cell.innerHTML = '';
+				edit_cell.appendChild(span);
+
+				context.update();
 		}
-	}
-
-	static numberFormatting(n) {
-		if (n == 0) return "-";
-		return n.toLocaleString();
 	}
 
 	commandsEventsHandler(event) {
 		// Check if the clicked element has a "data-command" attribute
 
-		const clickedElement = event.target.closest('[data-command]');
+		const clickedElement = event.target.closest("[data-command]");
 
 		if (!clickedElement) return;
 
@@ -194,74 +225,74 @@ export class CFXTable {
 			switch (action) {
 				case "month":
 					console.log("month");
-					if(this.time_interval == CFDate.time_interval.month) return;
-					this.time_interval = CFDate.time_interval.month
+					if (this.time_interval == CFDate.time_interval.month)
+						return;
+					this.time_interval = CFDate.time_interval.month;
 					break;
 
 				case "quarter":
 					console.log("quarter");
-					if(this.time_interval == CFDate.time_interval.quarter) return;
-					this.time_interval = CFDate.time_interval.quarter
+					if (this.time_interval == CFDate.time_interval.quarter)
+						return;
+					this.time_interval = CFDate.time_interval.quarter;
 					break;
-				
+
 				case "year":
 					console.log("year");
-					if(this.time_interval == CFDate.time_interval.year) return;
-					this.time_interval = CFDate.time_interval.year
+					if (this.time_interval == CFDate.time_interval.year) return;
+					this.time_interval = CFDate.time_interval.year;
 					break;
 
 				case "scrollbar":
 					console.log("scrollbar");
-					const scrollbar_container = document.getElementById('scroll-section');
-					scrollbar_container.classList.toggle('hidden');
+					const scrollbar_container =
+						document.getElementById("scroll-section");
+					scrollbar_container.classList.toggle("hidden");
 					// scrollbar_container.style.toggle('hidden');
 					break;
 
 				case "chart":
 					console.log("chart");
-				
+
 					break;
 
 				case "add-line":
 					console.log("add line");
-					this.addRow()
-					break
-				
+					this.addRow();
+					break;
+
 				default:
-					
 					break;
 			}
 
 			this.update();
 		}
 	}
-}
 
-/**
- * Update the data of a table row
- * @param {Object} row object with components of a row
- * @param {CFLine} line_data data of the cf line
- */
-function updateRow(row, line_data) {
-	row.row_head.attr("data-rowid", line_data.id);
-	row.cf.attr("data-rowid", line_data.id);
+	/**
+	 * Update the "total" div for each row in a tabular interface based on a calculation function.
+	 *
+	 * @param {function} calculateTotal - A function that calculates the total value based on a given row_id.
+	 */
+	updateTotals() {
+		// Select all rows with the "row" class
+		const rows = document.querySelectorAll(".row-head .row");
 
-	row.row_head.find(".row-name").text(line_data.name);
+		// Iterate through each row and update the "total" div
+		rows.forEach((row) => {
+			// Get the row_id from the "data-rowid" attribute
+			const row_id = parseInt(row.getAttribute("data-rowid"));
 
-	let cf_list = []
-	line_data.values.forEach((value) => {
-		const div = document.createElement('div');
-		div.classList.add('col', 'cell');
-		
-		const span = document.createElement('span');
-		span.textContent = CFXTable.numberFormatting(value);
-		if(value<0) span.classList.add('negative-number');
-		
-		div.appendChild(span);
-		cf_list.push(div);
-	 });
+			// Find the "total" div within the current row
+			const totalDiv = row.querySelector(".total");
 
-	row.cf[0].replaceChildren(...cf_list);
+			// Update the content of the "total" div with the calculated total
+			const value = this.dataset.getLine(row_id).calculateTotal();
 
-	return row;
+			const span = document.createElement("span");
+			span.textContent = numberFormatting(value);
+			if (value < 0) span.classList.add("negative-number");
+			totalDiv.replaceChildren(span);
+		});
+	}
 }
