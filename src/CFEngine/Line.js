@@ -10,9 +10,10 @@ import { CFElement } from "./Element";
  * - put M,Q,Y data into a map accessible with date_type
  */
 export class CFLine {
-	constructor(_id = 0, _name = "Data name", data = null) {
+	constructor(_id = 0, _name = "Data name", data = null, style = 0) {
 		this.id = _id;
 		this.line_name = _name;
+		this.style = style;
 		this.raw_data = []; //daily
 
 		/** Range of dates (end of months) expressed in millisec */

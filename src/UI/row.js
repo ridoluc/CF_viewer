@@ -70,6 +70,13 @@ export function updateRow(row, line_data, dates) {
 	row.row_head.attr("data-rowid", line_data.id);
 	row.cf.attr("data-rowid", line_data.id);
 
+	if(line_data.style){
+		const classList = ["row-style_std","row-style-total1", "row-style-total2"];
+
+		row.row_head.addClass(classList[line_data.style]);
+		row.cf.addClass(classList[line_data.style]);
+	}
+
 	row.row_head.find(".row-name").text(line_data.name);
 
 	let cf_list = []

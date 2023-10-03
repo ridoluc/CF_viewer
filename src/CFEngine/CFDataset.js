@@ -7,6 +7,7 @@ export class CFDataSet {
 		this.idCounter = 0;
 		this.CFlines = [];
 		this.datesRange = { max: null, min: null };
+		this.setName = "";
 	}
 
 	/**
@@ -47,6 +48,7 @@ export class CFDataSet {
 		return {
 			id: line.id,
 			name: line.line_name,
+			style:line.style,
 			values: line.getValues(
 				new CFDate(this.datesRange.min),
 				new CFDate(this.datesRange.max),
@@ -55,8 +57,8 @@ export class CFDataSet {
 		};
 	}
 
-	addLine(name, data) {
-		let new_line = new CFLine(this.idCounter++, name, data);
+	addLine(name, data, style) {
+		let new_line = new CFLine(this.idCounter++, name, data, style);
 		this.CFlines.push(new_line);
 		this.updateDatesRange();
 

@@ -1,9 +1,12 @@
 import { CFXTable } from "./UI/CFXTable.js";
 import "./styles.scss";
 
-let testdata = [
+let testdata = {
+	dataName:"Some table Name",
+	data:[
 	{
 		name: "First Line",
+		style: 0,
 		cf: [
 			{ date: "2023-02-23", value: -10000 },
 			{ date: "2023-04-01", value: 10 },
@@ -18,6 +21,7 @@ let testdata = [
 	},
 	{
 		name: "Second Line",
+		style: 0,
 		cf: [
 			{ date: "2023-03-23", value: -1000 },
 			{ date: "2023-05-01", value: 10 },
@@ -32,6 +36,7 @@ let testdata = [
 	},
 	{
 		name: "Third Line",
+		style: 0,
 		cf: [
 		  { date: "2023-03-23", value: 500 },
 		  { date: "2023-05-01", value: -10 },
@@ -46,6 +51,7 @@ let testdata = [
 	 },
 	{
 		name: "Fourth Line",
+		style: 2,
 		cf: [
 		  { date: "2023-03-23", value: 100 },
 		  { date: "2023-05-01", value: 50 },
@@ -59,23 +65,13 @@ let testdata = [
 		],
 	 }
 	 
-	 
-	 
-	 
-	 
-	 
-];
+]};
 
 let Table;
 
 $(document).ready(function () {
 	Table = new CFXTable();
 
-	Table.dataset.addLine(testdata[0].name, testdata[0].cf);
-	Table.dataset.addLine(testdata[1].name, testdata[1].cf);
-	Table.dataset.addLine(testdata[2].name, testdata[2].cf);
-	Table.dataset.addLine(testdata[3].name, testdata[3].cf);
-
-	Table.create();
+	Table.create(testdata);
 
 });

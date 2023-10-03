@@ -29,8 +29,27 @@ export class CFXTable {
 		this.scrollbar;
 	}
 
-	create() {
+	setData(data){
+
+		this.dataset = new CFDataSet()
+		this.dataset.setName = data.dataName;
+
+		document.getElementById("table-name").innerText = this.dataset.setName;
+
+		data.data.forEach((d) =>{
+			this.dataset.addLine(d.name,d.cf, d.style);
+		})
+
+	}
+
+
+	create(data) {
 		// Update CF
+
+		if(data){
+			this.setData(data);
+		}
+
 		for (const line of this.dataset.CFlines) {
 			let new_row = rowCreate(line.id, this);
 

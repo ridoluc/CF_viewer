@@ -126,6 +126,9 @@ $cell-width: 90px;
          }
       }
 
+      .row-start-cell{
+         width: 20px !important; 
+      }
    }
 
 
@@ -161,10 +164,13 @@ $cell-width: 90px;
       &.row-style-total2 {
          border-top: 3px double #8fa7d4;
          font-weight: 600;
-         background-color: #f6f6f6;
+         // background-color: #f6f6f6;
          margin-bottom: 6px;
          height: 35px;
 
+         .row-name{
+            padding-left: 0px;
+         }
       }
    }
 
