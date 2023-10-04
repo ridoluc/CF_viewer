@@ -75,3 +75,7 @@ $(document).ready(function () {
 	Table.create(testdata);
 
 });
+
+function handleClick(params) {
+	console.log(params);
+}

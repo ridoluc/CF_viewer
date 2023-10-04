@@ -34,21 +34,53 @@
   <main class="flex-fill my-auto">
     <div class="container">
       <div class="row gx-4 gy-4 my-auto">
-        <h4 class="">Cash Flows</H4>
+        <h4 class="display-6">Cash Flows Viewer</H4>
         <div class="col">
           <div class="mb-4">
-            <p class="text-muted">Something here</p>
+            <p class="">Something here</p>
+
+            <!-- <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#exampleList">
+              Examples
+            </button> -->
+            
+
+
+
           </div>
         </div>
         <div class="col">
           <div class="mb-4">
-            <p class="text-muted">Examples</p>
+            <p class="">Examples</p>
+
+            <div id="exampleList" class="mt-3">
+              <ul class="list-unstyled">
+                <!-- Example 1 -->
+                <li class="text-primary">
+                  <i class="bi bi-table"></i> <a href="#" onclick="handleClick('data1')">Link 1</a>
+                </li>
+                <!-- Example 2 -->
+                <li class="text-primary">
+                  <i class="bi bi-building"></i> <a href="#" onclick="handleClick('data1')">Link 2</a>
+                </li>
+                <!-- Example 3 -->
+                <li class="text-primary">
+                  <i class="bi bi-list-columns-reverse"></i> <a href="#" onclick="handleClick('data1')">Link 3</a>
+                </li>
+                <!-- Add more examples here -->
+              </ul>
+            </div>
           </div>
         </div>
       </div>
+
+
       <div class="row gx-4 gy-4 my-auto">
         <div class="col">
 
+          <div class="form-check form-switch mb-4">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+            <label class="form-check-label" for="flexSwitchCheckChecked">Toolbar</label>
+          </div>
 
           <!-- App starts here -->
           <div class="cf-table-wrap" id="CFXTable">
@@ -120,6 +152,8 @@
   </footer>
 
   <script src="jquery-3.6.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
   <script src="./dist/your-plugin.js"></script>
 
 
