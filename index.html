@@ -34,53 +34,62 @@
   <main class="flex-fill my-auto">
     <div class="container">
       <div class="row gx-4 gy-4 my-auto">
-        <h4 class="display-6">Cash Flows Viewer</H4>
+        
         <div class="col">
-          <div class="mb-4">
-            <p class="">Something here</p>
+          <h4 class="display-6">Cash Flows Viewer</H4>
+          <div class="mb-1">
+            <p class="">JavaScript plugin for visualising cash flows </p>
 
             <!-- <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#exampleList">
               Examples
             </button> -->
             
-
+            <ul class="fw-light" style="font-size: 14px;">
+              <li>Select monthly, quarterly and yearly data from the M, Q and Y buttons</li>
+              <li>Double click on numbers to modify</li>
+              <li>Add and remove lines</li>
+              <li>Select a row and change the style with the pencil button</li>
+            </ul>
 
 
           </div>
         </div>
+        
         <div class="col">
-          <div class="mb-4">
-            <p class="">Examples</p>
-
+          <div class="mb-1">
+<!-- 
             <div id="exampleList" class="mt-3">
               <ul class="list-unstyled">
-                <!-- Example 1 -->
                 <li class="text-primary">
-                  <i class="bi bi-table"></i> <a href="#" onclick="handleClick('data1')">Link 1</a>
+                  <i class="bi bi-table"></i> <a href="#" id="example_data_example">Example Data</a>
                 </li>
-                <!-- Example 2 -->
                 <li class="text-primary">
-                  <i class="bi bi-building"></i> <a href="#" onclick="handleClick('data1')">Link 2</a>
+                  <i class="bi bi-graph-up"></i> <a href="#" id="example_data_bond">Bond</a>
                 </li>
-                <!-- Example 3 -->
                 <li class="text-primary">
-                  <i class="bi bi-list-columns-reverse"></i> <a href="#" onclick="handleClick('data1')">Link 3</a>
+                  <i class="bi bi-building"></i> <a href="#" id="example_data_pl">Income Statement</a>
                 </li>
-                <!-- Add more examples here -->
+                <li class="text-primary">
+                  <i class="bi bi-list-columns-reverse"></i> <a href="#" id="example_data_turnover">Turnover Data</a>
+                </li>
               </ul>
-            </div>
+            </div> -->
+
+
           </div>
         </div>
+
+
       </div>
 
 
       <div class="row gx-4 gy-4 my-auto">
         <div class="col">
 
-          <div class="form-check form-switch mb-4">
+          <!-- <div class="form-check form-switch mb-4">
             <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
             <label class="form-check-label" for="flexSwitchCheckChecked">Toolbar</label>
-          </div>
+          </div> -->
 
           <!-- App starts here -->
           <div class="cf-table-wrap" id="CFXTable">
@@ -102,7 +111,7 @@
               <div class="button-group">
                 <div class="label">Scrollbar</div>
                 <div class="button" data-command="scrollbar"><i class="bi bi-arrow-left-right"></i></div>
-                <div class="button" data-command="chart"><i class="bi bi-bar-chart"></i></div>
+                <!-- <div class="button" data-command="chart"><i class="bi bi-bar-chart"></i></div> -->
               </div>
 
             </div>
@@ -151,7 +160,7 @@
     </div>
   </footer>
 
-  <script src="jquery-3.6.1.min.js"></script>
+  <script src="./assets/jquery-3.6.1.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
   <script src="./dist/your-plugin.js"></script>

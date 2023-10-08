@@ -8,8 +8,9 @@ export class CFDate {
 
 	/** Parses from format yyyy-mm-dd */
 	static parse(val) {
-		let d = new Date(val);
-		return d.getTime();
+		let nVal = val.slice(0,10)+"T00:00";
+		let d = new Date(nVal);
+		return d.getTime()-100000;
 	}
 
 	static time_interval = { day: 0, month: 1, quarter: 2, year: 3 };

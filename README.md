@@ -1,27 +1,34 @@
-# Cash Flow Table Prototype
+# Cash Flow Visualizer
 
-## Visualisation Features
-- sorting
-- scrollbar
-- sharts
+**Note: This is a Proof of Concept and not a finalized product.**
 
+Cash Flow Visualizer is a JavaScript plugin designed to help you visualize and organize cash flows and other financial data within defined time intervals. It provides a user-friendly table interface with specialized features for displaying and managing cash flows. This tool has potential applications for financial websites, asset management platforms, and listed company websites (displaying P&L and BS).
 
+![Insert Image Here](#) <!-- Replace with an actual image link -->
 
-## Pres
+## Key Features
+- **Time Interval Selection**: Easily switch between monthly, quarterly, and yearly views.
+- **Scrollable Overflow**: Keep the first section of the table fixed while scrolling to visualize longer cash flow data.
+- **Row Styling and Grouping**: Customize row styles to display hierarchical information effectively.
+- **Data Manipulation**: Modify data in-place, allowing you to add and remove lines seamlessly.
 
-- showing cash flows
-- there are no sw for properly displaying CF
-- it's not a simple table
-- key aspect is fixing dates at intervals
-- then you can show it in monthlty quarterly yearly intervals
-- abd you can do all sort of things: add actuals, formatting
-- also solving eve present problems: to move around you can fit in a scollbar
-- or do more typical things like sticking in a chart
-- then yuo can show bonds, rental income, sales, P&L
-
-- why stop there?
-- you can actually 
+### Future Additions
+I plan to introduce the following features:
+- Excel Import and Export
+- Excel Copy and Paste
+- Built-in Excel Formulas
+- Integrated Charts
 
 
+## Development Roadmap
+Our development plans include the following key milestones:
 
-- argus
+- **Rewrite using React**: I'm planning to rewrite the codebase using React, to enhance the modularity, maintainability of the plugin and provide easier UI updates and events management.
+
+Package into a Shippable Plugin: I need to package the plugin into a user-friendly and easily deployable format once the PoC it's ready.
+
+Excel Integration: As part of future enhancements, I'm planning on integrating Excel capabilities, including import/export, copy/paste functionality, and built-in Excel formulas.
+
+
+## Installation and Usage
+*TO DO*

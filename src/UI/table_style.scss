@@ -2,13 +2,17 @@
    font-family: 'Roboto Mono';
    src: url(../../assets/fonts/RobotoMono-VariableFont_wght.ttf);
 }
+@font-face {
+   font-family: 'Source Code Pro';
+   src: url(../../assets/fonts/SourceCodePro-VariableFont_wght.ttf);
+}
 
 /* Variables */
 $primary-bg-color: #fff;
 $table-bg-color: #f6f7f8;
 $border-color: #d6e0ef;
 
-$font-size: 11px;
+$font-size: 12px;
 $row-height: 30px;
 $cell-width: 90px;
 
@@ -97,7 +101,7 @@ $cell-width: 90px;
 
    .table-layout {
       display: grid;
-      grid-template-columns: 270px 1fr;
+      grid-template-columns: 300px 1fr;
       grid-template-areas: "row-head-area cf-area";
    }
 
@@ -238,7 +242,10 @@ $cell-width: 90px;
       }
 
       .row-name {
-         margin-right: auto;
+         white-space: nowrap;
+         overflow-x: hidden;
+         width: 120px;
+     
 
          input {
             all: unset;
@@ -321,7 +328,7 @@ $cell-width: 90px;
          padding-right: 5px;
 
          font-weight: bold;
-
+         margin-left: auto;
       }
 
 
