@@ -25,9 +25,9 @@ Our development plans include the following key milestones:
 
 - **Rewrite using React**: I'm planning to rewrite the codebase using React, to enhance the modularity, maintainability of the plugin and provide easier UI updates and events management.
 
-Package into a Shippable Plugin: I need to package the plugin into a user-friendly and easily deployable format once the PoC it's ready.
+- **Package into a Shippable Plugin**: I need to package the plugin into a user-friendly and easily deployable format once the PoC it's ready.
 
-Excel Integration: As part of future enhancements, I'm planning on integrating Excel capabilities, including import/export, copy/paste functionality, and built-in Excel formulas.
+- **Excel Integration**: As part of future enhancements, I'm planning on integrating Excel capabilities, including import/export, copy/paste functionality, and built-in Excel formulas.
 
 
 ## Installation and Usage
