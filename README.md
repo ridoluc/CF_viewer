@@ -4,7 +4,7 @@
 
 Cash Flow Visualizer is a JavaScript plugin designed to help you visualize and organize cash flows and other financial data within defined time intervals. It provides a user-friendly table interface with specialized features for displaying and managing cash flows. This tool has potential applications for financial websites, asset management platforms, and listed company websites (displaying P&L and BS).
 
-![Insert Image Here](#) <!-- Replace with an actual image link -->
+![CF Table image](./assets/img/CFViewer_Img.png)
 
 ## Key Features
 - **Time Interval Selection**: Easily switch between monthly, quarterly, and yearly views.
