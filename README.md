@@ -1,4 +1,4 @@
-# Cash Flow Visualizer
+# Cash Flow Viewer
 
 **Note: This is a Proof of Concept and not a finalized product.**
 
@@ -23,9 +23,9 @@ I plan to introduce the following features:
 ## Development Roadmap
 Our development plans include the following key milestones:
 
-- **Rewrite using React**: I'm planning to rewrite the codebase using React, to enhance the modularity, maintainability of the plugin and provide easier UI updates and events management.
+- **Rewrite using React**: I'm planning to rewrite the codebase using React, to enhance the modularity, and maintainability of the plugin and provide easier UI updates and events management.
 
-- **Package into a Shippable Plugin**: I need to package the plugin into a user-friendly and easily deployable format once the PoC it's ready.
+- **Package into a Shippable Plugin**: I need to package the plugin into a user-friendly and easily deployable format once the PoC is ready.
 
 - **Excel Integration**: As part of future enhancements, I'm planning on integrating Excel capabilities, including import/export, copy/paste functionality, and built-in Excel formulas.
 
